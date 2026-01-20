@@ -3,78 +3,105 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>Vehicle Service Management System</title>
+  <title>Vehicle Service Management System | Pro UI</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --bg1:#09001a;
-      --bg2:#001a2f;
-      --neon1:#00f5ff;
-      --neon2:#ff4dff;
-      --neon3:#00ff85;
-      --card: rgba(255,255,255,0.08);
-      --card2: rgba(255,255,255,0.12);
-      --text:#eaffff;
-      --muted: rgba(234,255,255,0.75);
+      /* Pro palette */
+      --bg:#06070b;
+      --bg2:#0a0d16;
+      --card: rgba(255,255,255,0.07);
+      --card2: rgba(255,255,255,0.10);
+      --stroke: rgba(255,255,255,0.12);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.70);
+
+      --accent: #2ee8ff;
+      --accent2:#8a5bff;
+      --accent3:#00ffa3;
+
       --danger:#ff4d6d;
-      --warn:#ffcf5c;
-      --ok:#00ff85;
-      --shadow: 0 20px 60px rgba(0,0,0,0.45);
+      --warn:#ffd166;
+      --ok:#00ffa3;
+
+      --shadow: 0 30px 80px rgba(0,0,0,0.55);
       --radius: 22px;
     }
 
-    *{box-sizing:border-box;margin:0;padding:0;font-family: ui-sans-serif, system-ui, Segoe UI, Roboto, Arial;}
+    *{box-sizing:border-box;margin:0;padding:0;font-family:"Outfit", system-ui, Segoe UI, Arial;}
+    html{scroll-behavior:smooth;}
     body{
       min-height:100vh;
       color:var(--text);
       overflow-x:hidden;
-      background: radial-gradient(1200px 600px at 10% 10%, rgba(255,77,255,0.18), transparent 60%),
-                  radial-gradient(900px 500px at 90% 20%, rgba(0,245,255,0.16), transparent 60%),
-                  radial-gradient(900px 500px at 60% 90%, rgba(0,255,133,0.14), transparent 60%),
-                  linear-gradient(135deg, var(--bg1), var(--bg2));
+      background:
+        radial-gradient(900px 480px at 10% 12%, rgba(46,232,255,0.14), transparent 60%),
+        radial-gradient(820px 460px at 90% 20%, rgba(138,91,255,0.16), transparent 60%),
+        radial-gradient(900px 520px at 55% 95%, rgba(0,255,163,0.11), transparent 60%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
     }
 
-    /* Animated AI vibrant background */
-    .bg-orbs{
-      position:fixed; inset:0; z-index:-1; pointer-events:none;
-      filter: blur(40px);
-      opacity:0.85;
+    /* Professional animated mesh */
+    .mesh{
+      position:fixed; inset:0; z-index:-2; pointer-events:none;
+      opacity:0.45;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          rgba(255,255,255,0.06) 0px,
+          rgba(255,255,255,0.06) 1px,
+          transparent 1px,
+          transparent 80px
+        ),
+        repeating-linear-gradient(
+          0deg,
+          rgba(255,255,255,0.05) 0px,
+          rgba(255,255,255,0.05) 1px,
+          transparent 1px,
+          transparent 80px
+        );
+      mask-image: radial-gradient(circle at 50% 50%, black 0%, transparent 70%);
     }
-    .orb{
-      position:absolute; width:420px; height:420px; border-radius:50%;
-      animation: float 10s ease-in-out infinite;
-      mix-blend-mode: screen;
+
+    .spotlight{
+      position:fixed; inset:-20%;
+      pointer-events:none;
+      z-index:-1;
+      background: radial-gradient(circle at 25% 15%, rgba(46,232,255,0.17), transparent 40%),
+                  radial-gradient(circle at 80% 30%, rgba(138,91,255,0.16), transparent 42%),
+                  radial-gradient(circle at 55% 95%, rgba(0,255,163,0.12), transparent 45%);
+      filter: blur(50px);
+      animation: drift 12s ease-in-out infinite;
     }
-    .orb.o1{left:-120px; top:-80px; background: radial-gradient(circle at 30% 30%, rgba(255,77,255,0.9), transparent 60%);}
-    .orb.o2{right:-140px; top:100px; background: radial-gradient(circle at 30% 30%, rgba(0,245,255,0.9), transparent 60%); animation-duration:13s;}
-    .orb.o3{left:40%; bottom:-160px; background: radial-gradient(circle at 30% 30%, rgba(0,255,133,0.9), transparent 60%); animation-duration:15s;}
-    @keyframes float{
+    @keyframes drift{
       0%,100%{transform: translate(0,0) scale(1);}
-      50%{transform: translate(40px,-30px) scale(1.08);}
+      50%{transform: translate(35px,-20px) scale(1.05);}
     }
 
-    /* Top Navbar */
+    /* Navbar */
     .topbar{
       position:sticky; top:0; z-index:50;
-      backdrop-filter: blur(12px);
-      background: rgba(10, 5, 30, 0.55);
-      border-bottom: 1px solid rgba(255,255,255,0.12);
-      padding: 14px 18px;
+      backdrop-filter: blur(14px);
+      background: rgba(6,7,11,0.62);
+      border-bottom: 1px solid rgba(255,255,255,0.10);
     }
     .topbar-inner{
       max-width:1200px; margin:auto;
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding: 14px 16px;
+      display:flex; justify-content:space-between; align-items:center; gap:14px;
     }
-    .brand{
-      display:flex; align-items:center; gap:12px;
-      font-weight:800; letter-spacing:0.5px;
-    }
+
+    .brand{display:flex; align-items:center; gap:12px;}
     .logo{
-      width:42px; height:42px; border-radius:14px;
-      background: linear-gradient(135deg, rgba(0,245,255,0.9), rgba(255,77,255,0.85));
-      box-shadow: 0 0 20px rgba(0,245,255,0.25), 0 0 24px rgba(255,77,255,0.18);
-      position:relative;
-      overflow:hidden;
+      width:44px;height:44px;border-radius:14px;
+      background: linear-gradient(135deg, rgba(46,232,255,1), rgba(138,91,255,1));
+      box-shadow: 0 0 26px rgba(46,232,255,0.18), 0 0 32px rgba(138,91,255,0.14);
+      position:relative; overflow:hidden;
     }
     .logo:after{
       content:"";
@@ -87,268 +114,305 @@
       0%{transform: translateX(-80%) rotate(25deg);}
       100%{transform: translateX(120%) rotate(25deg);}
     }
-    .brand small{
-      display:block;
-      color:var(--muted);
-      font-weight:600;
-      letter-spacing:0;
-      margin-top:2px;
-    }
-    .pill{
-      display:inline-flex;
-      gap:8px;
-      align-items:center;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.09);
-      border:1px solid rgba(255,255,255,0.14);
-      box-shadow: inset 0 0 20px rgba(255,255,255,0.05);
-      font-weight:700;
-      font-size:14px;
-      color:var(--text);
-    }
-    .pill b{color: var(--neon1);}
+
+    .brand-title{font-weight:900; letter-spacing:0.4px;}
+    .brand-sub{color:var(--muted); font-weight:600; font-size:12.5px; margin-top:2px;}
+
     .top-actions{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
+
+    .pill{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:8px 12px; border-radius:999px;
+      background: rgba(255,255,255,0.07);
+      border:1px solid rgba(255,255,255,0.12);
+      font-weight:700; font-size:13px;
+      box-shadow: inset 0 0 20px rgba(255,255,255,0.03);
+    }
+    .pill b{
+      color: var(--accent);
+      font-weight:900;
+    }
+
     .btn{
       cursor:pointer;
       border:none;
       padding: 10px 14px;
       border-radius: 14px;
-      font-weight:800;
+      font-weight:900;
       color: var(--text);
-      background: rgba(255,255,255,0.10);
-      border:1px solid rgba(255,255,255,0.16);
-      transition: 0.2s ease;
-      box-shadow: inset 0 0 25px rgba(255,255,255,0.04);
+      background: rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.12);
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      user-select:none;
     }
     .btn:hover{
       transform: translateY(-1px);
-      border-color: rgba(0,245,255,0.35);
-      box-shadow: 0 0 25px rgba(0,245,255,0.08), 0 0 30px rgba(255,77,255,0.06);
+      border-color: rgba(46,232,255,0.25);
+      box-shadow: 0 0 26px rgba(46,232,255,0.06);
     }
     .btn.primary{
-      background: linear-gradient(135deg, rgba(0,245,255,0.92), rgba(255,77,255,0.82));
+      background: linear-gradient(135deg, rgba(46,232,255,0.95), rgba(138,91,255,0.85));
       color:#071018;
       border:none;
-      box-shadow: 0 0 28px rgba(0,245,255,0.20), 0 0 30px rgba(255,77,255,0.12);
+      box-shadow: 0 20px 40px rgba(46,232,255,0.08), 0 20px 50px rgba(138,91,255,0.07);
     }
     .btn.danger{
-      background: rgba(255,77,109,0.14);
+      background: rgba(255,77,109,0.12);
       border:1px solid rgba(255,77,109,0.35);
-      color: #ffdbe3;
+      color:#ffdbe3;
     }
     .btn.mini{padding: 8px 12px; border-radius: 12px; font-size:13px;}
 
     /* Layout */
     .container{
       max-width:1200px;
-      margin: 22px auto;
-      padding: 0 16px 40px;
+      margin: 24px auto;
+      padding: 0 16px 50px;
     }
 
+    /* Hero (with car image) */
     .hero{
       display:grid;
       grid-template-columns: 1.2fr 0.8fr;
       gap:16px;
       margin-top: 16px;
     }
-    @media (max-width: 900px){
+    @media (max-width: 920px){
       .hero{grid-template-columns:1fr;}
     }
 
     .card{
       background: var(--card);
-      border:1px solid rgba(255,255,255,0.14);
+      border:1px solid rgba(255,255,255,0.12);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       overflow:hidden;
       position:relative;
     }
-    .card .glow{
-      position:absolute; inset:-80px;
-      background: radial-gradient(circle at 30% 30%, rgba(0,245,255,0.14), transparent 55%),
-                  radial-gradient(circle at 70% 40%, rgba(255,77,255,0.14), transparent 55%),
-                  radial-gradient(circle at 50% 80%, rgba(0,255,133,0.10), transparent 60%);
+    .card-inner{position:relative; padding: 18px;}
+    .soft-glow{
+      position:absolute; inset:-120px;
+      background: radial-gradient(circle at 30% 20%, rgba(46,232,255,0.14), transparent 55%),
+                  radial-gradient(circle at 75% 30%, rgba(138,91,255,0.14), transparent 60%),
+                  radial-gradient(circle at 50% 90%, rgba(0,255,163,0.10), transparent 60%);
       pointer-events:none;
     }
-    .card-inner{position:relative; padding: 18px;}
+
+    .hero-banner{
+      display:grid; grid-template-columns: 1.05fr 0.95fr; gap:16px; align-items:center;
+    }
+    @media (max-width: 920px){
+      .hero-banner{grid-template-columns:1fr;}
+    }
+
     .title{
-      font-size: 30px;
-      font-weight: 900;
-      line-height: 1.15;
+      font-size: 34px;
+      font-weight: 1000;
+      line-height: 1.08;
+      letter-spacing: 0.2px;
     }
     .subtitle{
       margin-top: 10px;
       color: var(--muted);
-      font-weight: 650;
-      line-height:1.6;
+      font-weight: 600;
+      line-height:1.65;
     }
+    .hero-car{
+      width:100%;
+      border-radius: 20px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.25);
+      position:relative;
+      min-height: 240px;
+      box-shadow: 0 30px 70px rgba(0,0,0,0.45);
+      transform: translateZ(0);
+    }
+    .hero-car img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      filter: contrast(1.05) saturate(1.1);
+      opacity:0.95;
+      transform: scale(1.04);
+    }
+    .hero-car:after{
+      content:"";
+      position:absolute; inset:0;
+      background: linear-gradient(120deg, rgba(6,7,11,0.25), rgba(6,7,11,0.75));
+    }
+    .hero-car .tag{
+      position:absolute; left:14px; bottom:14px; z-index:2;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-weight:900;
+      font-size:13px;
+      background: rgba(0,0,0,0.55);
+      border:1px solid rgba(255,255,255,0.14);
+      backdrop-filter: blur(10px);
+    }
+    .tag b{color: var(--accent);}
 
     .chips{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;}
     .chip{
       padding: 9px 12px;
       border-radius: 999px;
-      border:1px solid rgba(255,255,255,0.16);
-      background: rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
       font-weight:800;
       font-size: 13px;
     }
-    .chip.ai{border-color: rgba(0,245,255,0.35); box-shadow: 0 0 16px rgba(0,245,255,0.08);}
-    .chip.sec{border-color: rgba(255,77,255,0.35); box-shadow: 0 0 16px rgba(255,77,255,0.08);}
-    .chip.fast{border-color: rgba(0,255,133,0.35); box-shadow: 0 0 16px rgba(0,255,133,0.07);}
+    .chip.ai{border-color: rgba(46,232,255,0.28);}
+    .chip.sec{border-color: rgba(138,91,255,0.28);}
+    .chip.fast{border-color: rgba(0,255,163,0.24);}
 
-    /* Auth card */
+    .divider{height:1px;background:rgba(255,255,255,0.10); margin: 14px 0;}
+    .hint{font-size:13px;color: rgba(255,255,255,0.68); line-height:1.6;}
+    .small{font-size:12px;font-weight:700;color: rgba(255,255,255,0.60);}
+
+    /* Auth tabs */
     .tabs{
-      display:flex; gap:10px; padding: 10px;
+      display:flex; gap:10px; padding:10px;
       border-radius: 18px;
-      background: rgba(0,0,0,0.16);
-      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.22);
+      border:1px solid rgba(255,255,255,0.10);
     }
     .tab{
       flex:1;
       text-align:center;
-      padding: 10px;
+      padding:10px;
       border-radius: 14px;
-      font-weight:900;
+      font-weight: 1000;
       cursor:pointer;
-      transition:0.2s ease;
-      border: 1px solid transparent;
-      color: var(--muted);
+      color: rgba(255,255,255,0.65);
+      transition: 0.18s ease;
+      border:1px solid transparent;
     }
     .tab.active{
       color:#071018;
-      background: linear-gradient(135deg, rgba(0,245,255,0.95), rgba(255,77,255,0.86));
-      box-shadow: 0 0 20px rgba(0,245,255,0.16);
+      background: linear-gradient(135deg, rgba(46,232,255,0.95), rgba(138,91,255,0.85));
+      box-shadow: 0 18px 40px rgba(46,232,255,0.10);
     }
 
-    .form{
-      margin-top: 12px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-    .field{
-      display:flex; flex-direction:column; gap:6px;
-    }
-    .field label{
-      font-weight:800; font-size:13px; color: rgba(234,255,255,0.86);
-    }
+    .form{margin-top:12px; display:flex; flex-direction:column; gap:10px;}
+    .field{display:flex; flex-direction:column; gap:6px;}
+    .field label{font-weight:900; font-size:13px; color: rgba(255,255,255,0.85);}
+
     .field input, .field select, .field textarea{
-      padding: 12px 12px;
+      padding: 12px;
       border-radius: 14px;
       outline:none;
-      border:1px solid rgba(255,255,255,0.18);
-      background: rgba(0,0,0,0.25);
+      border:1px solid rgba(255,255,255,0.14);
+      background: rgba(0,0,0,0.28);
       color: var(--text);
-      font-weight:700;
+      font-weight: 700;
+      transition: 0.18s ease;
     }
     .field textarea{min-height: 90px; resize: vertical;}
-    .field input:focus,.field select:focus,.field textarea:focus{
-      border-color: rgba(0,245,255,0.45);
-      box-shadow: 0 0 0 4px rgba(0,245,255,0.08);
+    .field input:focus, .field select:focus, .field textarea:focus{
+      border-color: rgba(46,232,255,0.40);
+      box-shadow: 0 0 0 4px rgba(46,232,255,0.08);
     }
-    .hint{
-      font-size: 13px;
-      color: rgba(234,255,255,0.66);
-      line-height:1.5;
-    }
+    .inline{display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
 
     /* Dashboard */
-    .dash{
-      display:none;
-      margin-top:18px;
-    }
+    .dash{display:none; margin-top:18px;}
+
     .dash-grid{
       display:grid;
-      grid-template-columns: 300px 1fr;
+      grid-template-columns: 320px 1fr;
       gap:16px;
     }
-    @media (max-width: 950px){
+    @media (max-width: 980px){
       .dash-grid{grid-template-columns:1fr;}
     }
-    .sidebar{
-      padding: 16px;
-    }
-    .side-title{
-      font-size: 16px;
-      font-weight: 1000;
-      letter-spacing:0.3px;
-    }
+
+    .sidebar{padding:16px;}
+    .side-title{font-size:16px;font-weight:1000;letter-spacing:0.2px;}
     .side-user{
       margin-top:10px;
       padding: 12px;
       border-radius: 16px;
-      background: rgba(255,255,255,0.07);
-      border:1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.10);
     }
-    .side-user b{color: var(--neon1);}
-    .menu{
-      margin-top:12px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
+    .side-user b{color: var(--accent);}
+
+    .menu{margin-top:12px; display:flex; flex-direction:column; gap:10px;}
     .menu button{
-      text-align:left;
-      width:100%;
+      text-align:left; width:100%;
       border-radius: 16px;
       padding: 12px;
-      font-weight:900;
+      font-weight: 1000;
       cursor:pointer;
-      background: rgba(255,255,255,0.07);
-      border:1px solid rgba(255,255,255,0.12);
-      color:var(--text);
-      transition: 0.2s ease;
+      background: rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.10);
+      color: var(--text);
+      transition: 0.18s ease;
     }
     .menu button:hover{
       transform: translateY(-1px);
-      border-color: rgba(255,77,255,0.35);
-      box-shadow: 0 0 22px rgba(255,77,255,0.08);
+      border-color: rgba(138,91,255,0.25);
+      box-shadow: 0 0 22px rgba(138,91,255,0.06);
     }
     .menu button.active{
-      background: linear-gradient(135deg, rgba(0,245,255,0.22), rgba(255,77,255,0.18));
-      border-color: rgba(0,245,255,0.35);
+      background: linear-gradient(135deg, rgba(46,232,255,0.14), rgba(138,91,255,0.12));
+      border-color: rgba(46,232,255,0.26);
     }
 
-    .content{
-      padding:16px;
-    }
-    .content h2{
-      font-size: 22px;
-      font-weight: 1000;
-    }
-    .content p{
-      margin-top:8px;
-      color: var(--muted);
-      line-height:1.6;
-      font-weight:650;
-    }
+    .content{padding:16px;}
+    .content h2{font-size: 22px; font-weight:1000;}
+    .content p{margin-top:8px; color: var(--muted); line-height:1.7; font-weight:600;}
 
-    .grid-2{
-      display:grid; grid-template-columns: 1fr 1fr; gap:14px; margin-top: 12px;
+    .banner-mini{
+      margin-top:14px;
+      border-radius: 20px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,0.10);
+      background: rgba(0,0,0,0.25);
+      position:relative;
+      height: 190px;
     }
+    .banner-mini img{
+      width:100%; height:100%; object-fit:cover; display:block;
+      filter: contrast(1.06) saturate(1.08);
+      transform: scale(1.03);
+      opacity: 0.9;
+    }
+    .banner-mini:after{
+      content:"";
+      position:absolute; inset:0;
+      background: linear-gradient(120deg, rgba(6,7,11,0.30), rgba(6,7,11,0.82));
+    }
+    .banner-mini .text{
+      position:absolute; inset:0; z-index:2;
+      padding: 16px;
+      display:flex; flex-direction:column; justify-content:flex-end;
+      gap:6px;
+    }
+    .banner-mini .text b{font-weight:1000;}
+    .banner-mini .text span{color: rgba(255,255,255,0.78); font-weight:650;}
+
+    .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top: 12px;}
     @media (max-width: 850px){ .grid-2{grid-template-columns:1fr;}}
 
     .panel{
       padding:16px;
       border-radius: 20px;
-      background: rgba(255,255,255,0.06);
-      border:1px solid rgba(255,255,255,0.12);
-      position:relative;
-      overflow:hidden;
+      background: rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.10);
+      position:relative; overflow:hidden;
     }
     .panel:before{
       content:"";
       position:absolute; inset:-60px;
-      background: radial-gradient(circle at 20% 20%, rgba(0,245,255,0.12), transparent 50%),
-                  radial-gradient(circle at 80% 30%, rgba(255,77,255,0.12), transparent 55%);
+      background: radial-gradient(circle at 18% 18%, rgba(46,232,255,0.10), transparent 50%),
+                  radial-gradient(circle at 85% 35%, rgba(138,91,255,0.10), transparent 55%);
       pointer-events:none;
     }
     .panel > *{position:relative;}
-    .panel h3{
-      font-weight:1000;
-      font-size:16px;
-    }
+    .panel h3{font-weight: 1000; font-size:16px;}
 
     .table{
       width:100%;
@@ -359,33 +423,39 @@
     .table th{
       text-align:left;
       font-size:12px;
-      color: rgba(234,255,255,0.78);
+      color: rgba(255,255,255,0.74);
       padding: 8px 10px;
     }
     .row{
-      background: rgba(0,0,0,0.22);
-      border:1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.28);
+      border:1px solid rgba(255,255,255,0.10);
+      transition: 0.18s ease;
+    }
+    .row:hover{
+      transform: translateY(-1px);
+      border-color: rgba(46,232,255,0.18);
+      box-shadow: 0 0 26px rgba(46,232,255,0.05);
     }
     .table td{
       padding: 12px 10px;
       font-weight:750;
-      color: rgba(234,255,255,0.92);
+      color: rgba(255,255,255,0.90);
     }
     .row td:first-child{border-top-left-radius: 14px; border-bottom-left-radius: 14px;}
     .row td:last-child{border-top-right-radius: 14px; border-bottom-right-radius: 14px;}
+
     .badge{
-      display:inline-flex;
-      align-items:center;
+      display:inline-flex; align-items:center;
       padding: 7px 10px;
       border-radius: 999px;
       font-size: 12px;
       font-weight:1000;
-      border:1px solid rgba(255,255,255,0.16);
+      border:1px solid rgba(255,255,255,0.14);
       background: rgba(255,255,255,0.06);
     }
-    .b-pending{border-color: rgba(255,207,92,0.55); color:#ffe6b0; box-shadow:0 0 18px rgba(255,207,92,0.08);}
-    .b-progress{border-color: rgba(0,245,255,0.55); color:#d8feff; box-shadow:0 0 18px rgba(0,245,255,0.08);}
-    .b-done{border-color: rgba(0,255,133,0.55); color:#d2ffe9; box-shadow:0 0 18px rgba(0,255,133,0.07);}
+    .b-pending{border-color: rgba(255,209,102,0.55); color:#ffe7b5;}
+    .b-progress{border-color: rgba(46,232,255,0.55); color:#d8feff;}
+    .b-done{border-color: rgba(0,255,163,0.50); color:#d2ffe9;}
 
     .toast{
       position:fixed; left:50%; bottom:22px; transform: translateX(-50%);
@@ -393,8 +463,8 @@
       padding: 12px 14px;
       border-radius: 16px;
       font-weight:900;
-      background: rgba(0,0,0,0.55);
-      border:1px solid rgba(255,255,255,0.18);
+      background: rgba(0,0,0,0.60);
+      border:1px solid rgba(255,255,255,0.14);
       backdrop-filter: blur(14px);
       display:none;
       box-shadow: var(--shadow);
@@ -406,29 +476,21 @@
     .footer-note{
       margin-top: 18px;
       font-size: 12px;
-      color: rgba(234,255,255,0.55);
+      color: rgba(255,255,255,0.55);
       line-height:1.6;
       text-align:center;
     }
-
     .danger-text{color:#ffd3db;}
-    .small{font-size:12px; font-weight:800; color: rgba(234,255,255,0.62);}
-    .divider{height:1px; background: rgba(255,255,255,0.12); margin: 12px 0;}
-    .inline{display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
     .right{display:flex; justify-content:flex-end;}
 
-    /* Hidden sections */
     .view{display:none;}
     .view.active{display:block;}
   </style>
 </head>
 
 <body>
-  <div class="bg-orbs">
-    <div class="orb o1"></div>
-    <div class="orb o2"></div>
-    <div class="orb o3"></div>
-  </div>
+  <div class="mesh"></div>
+  <div class="spotlight"></div>
 
   <!-- TOPBAR -->
   <div class="topbar">
@@ -436,8 +498,8 @@
       <div class="brand">
         <div class="logo"></div>
         <div>
-          <div>Vehicle Service Management System</div>
-          <small>AI Vibrant • Single HTML • LocalStorage Powered</small>
+          <div class="brand-title">Vehicle Service Management</div>
+          <div class="brand-sub">Professional UI • Single HTML • LocalStorage Database</div>
         </div>
       </div>
 
@@ -456,32 +518,43 @@
     <div id="authArea">
       <div class="hero">
         <div class="card">
-          <div class="glow"></div>
+          <div class="soft-glow"></div>
           <div class="card-inner">
-            <div class="title">🚗 Smart Vehicle Service Management</div>
-            <div class="subtitle">
-              A complete car service management system with <b>Customer + Admin</b> operations.
-              Includes AI vibrant UI, booking, service status tracking, and admin controls.
-              <br/><br/>
-              ✅ No backend needed • Runs offline • Single HTML file
-            </div>
+            <div class="hero-banner">
+              <div>
+                <div class="title">A Premium Vehicle Service Platform</div>
+                <div class="subtitle">
+                  Built like a real-world professional system.
+                  Customers can book services, add vehicles and track progress.
+                  Admin can manage customers, vehicles and update job status.
+                  <br><br>
+                  ✅ Offline Working • ✅ Single HTML • ✅ Standard SaaS UI
+                </div>
 
-            <div class="chips">
-              <div class="chip ai">✨ AI Vibrant UI</div>
-              <div class="chip sec">🔐 Customer & Admin Login</div>
-              <div class="chip fast">⚡ LocalStorage Database</div>
-            </div>
+                <div class="chips">
+                  <div class="chip ai">AI Inspired UI</div>
+                  <div class="chip sec">Secure Login System</div>
+                  <div class="chip fast">Fast LocalStorage DB</div>
+                </div>
 
-            <div class="divider"></div>
-            <div class="hint">
-              <b>Admin Login:</b> Username <b>admin</b> • Password <b>admin123</b><br/>
-              <span class="small">Tip: Register a customer account and start booking services.</span>
+                <div class="divider"></div>
+                <div class="hint">
+                  <b>Admin Login:</b> Username <b>admin</b> • Password <b>admin123</b><br/>
+                  <span class="small">You can register any customer and start booking services.</span>
+                </div>
+              </div>
+
+              <div class="hero-car">
+                <!-- Car image -->
+                <img alt="Car service" src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1400&q=80">
+                <div class="tag">🚘 <b>Premium</b> Service Experience</div>
+              </div>
             </div>
           </div>
         </div>
 
         <div class="card">
-          <div class="glow"></div>
+          <div class="soft-glow"></div>
           <div class="card-inner">
             <div class="tabs">
               <div class="tab active" id="tabCustomer" onclick="switchAuth('customer')">Customer</div>
@@ -504,7 +577,7 @@
                   <button class="btn" onclick="openRegister()">Register</button>
                 </div>
                 <div class="hint">
-                  Register a new account to add vehicle & book service.
+                  Register once → Login anytime → Add vehicles → Book service.
                 </div>
               </div>
             </div>
@@ -522,7 +595,7 @@
                 </div>
                 <button class="btn primary" onclick="adminLogin()">Login as Admin</button>
                 <div class="hint">
-                  Admin can update service status and manage customers/vehicles.
+                  Admin can update status and manage everything.
                 </div>
               </div>
             </div>
@@ -536,48 +609,56 @@
     <div class="dash" id="dashArea">
       <div class="dash-grid">
         <div class="card sidebar">
-          <div class="glow"></div>
+          <div class="soft-glow"></div>
           <div class="card-inner">
-            <div class="side-title">⚡ Dashboard</div>
+            <div class="side-title">Control Panel</div>
             <div class="side-user">
               Logged in as: <b id="loggedUser">-</b><br/>
               Role: <b id="loggedRole">-</b>
             </div>
 
             <div class="menu" id="menuCustomer" style="display:none">
-              <button class="active" onclick="openView('c_home', this)">🏠 Overview</button>
-              <button onclick="openView('c_vehicle', this)">🚘 Add Vehicle</button>
-              <button onclick="openView('c_book', this)">🛠️ Book Service</button>
-              <button onclick="openView('c_status', this)">📌 Service Status</button>
-              <button onclick="openView('c_history', this)">🧾 Service History</button>
+              <button class="active" onclick="openView('c_home', this)">Overview</button>
+              <button onclick="openView('c_vehicle', this)">Add Vehicle</button>
+              <button onclick="openView('c_book', this)">Book Service</button>
+              <button onclick="openView('c_status', this)">Service Status</button>
+              <button onclick="openView('c_history', this)">Service History</button>
             </div>
 
             <div class="menu" id="menuAdmin" style="display:none">
-              <button class="active" onclick="openView('a_home', this)">🏠 Overview</button>
-              <button onclick="openView('a_bookings', this)">📋 All Bookings</button>
-              <button onclick="openView('a_customers', this)">👥 Manage Customers</button>
-              <button onclick="openView('a_vehicles', this)">🚗 Manage Vehicles</button>
+              <button class="active" onclick="openView('a_home', this)">Overview</button>
+              <button onclick="openView('a_bookings', this)">All Bookings</button>
+              <button onclick="openView('a_customers', this)">Manage Customers</button>
+              <button onclick="openView('a_vehicles', this)">Manage Vehicles</button>
             </div>
 
             <div class="divider"></div>
             <div class="hint">
-              💡 Your data is stored locally in your browser using <b>LocalStorage</b>.
+              Data is stored locally in your browser using <b>LocalStorage</b>.
             </div>
           </div>
         </div>
 
         <div class="card content">
-          <div class="glow"></div>
+          <div class="soft-glow"></div>
           <div class="card-inner">
 
             <!-- CUSTOMER VIEWS -->
             <div class="view active" id="c_home">
-              <h2>Customer Overview ✨</h2>
-              <p>Manage your vehicles, book services, and track service status with AI-vibrant UI.</p>
+              <h2>Customer Overview</h2>
+              <p>Book services quickly and monitor every stage of your vehicle service process.</p>
+
+              <div class="banner-mini">
+                <img alt="Service workshop" src="https://images.unsplash.com/photo-1487754180451-c456f719a1fc?auto=format&fit=crop&w=1400&q=80">
+                <div class="text">
+                  <b>Track your service in real-time</b>
+                  <span>Professional workflow: Pending → In Progress → Completed</span>
+                </div>
+              </div>
 
               <div class="grid-2">
                 <div class="panel">
-                  <h3>📌 Quick Actions</h3>
+                  <h3>Quick Actions</h3>
                   <div class="divider"></div>
                   <div class="inline">
                     <button class="btn primary" onclick="openView('c_book')">Book New Service</button>
@@ -585,7 +666,7 @@
                   </div>
                 </div>
                 <div class="panel">
-                  <h3>📊 Your Summary</h3>
+                  <h3>Your Summary</h3>
                   <div class="divider"></div>
                   <div class="hint" id="customerSummary">Loading...</div>
                 </div>
@@ -593,11 +674,11 @@
             </div>
 
             <div class="view" id="c_vehicle">
-              <h2>Add Vehicle Details 🚘</h2>
-              <p>Add your car/bike details so you can book service easily.</p>
+              <h2>Add Vehicle Details</h2>
+              <p>Store your vehicle profile for smooth booking and service tracking.</p>
 
               <div class="panel">
-                <h3>Vehicle Form</h3>
+                <h3>Vehicle Registration Form</h3>
                 <div class="divider"></div>
                 <div class="grid-2">
                   <div class="field">
@@ -632,8 +713,8 @@
             </div>
 
             <div class="view" id="c_book">
-              <h2>Book Service 🛠️</h2>
-              <p>Choose a vehicle, select service type, and submit your booking.</p>
+              <h2>Book Service</h2>
+              <p>Pick a vehicle, choose service type and book instantly.</p>
 
               <div class="panel">
                 <h3>Service Booking</h3>
@@ -679,20 +760,20 @@
             </div>
 
             <div class="view" id="c_status">
-              <h2>Service Status 📌</h2>
-              <p>Track your active service bookings.</p>
+              <h2>Service Status</h2>
+              <p>Monitor all active service bookings and their current status.</p>
               <div class="panel">
-                <h3>Your Current Services</h3>
+                <h3>Active Services</h3>
                 <div class="divider"></div>
                 <table class="table" id="statusTable"></table>
               </div>
             </div>
 
             <div class="view" id="c_history">
-              <h2>Service History 🧾</h2>
-              <p>See completed services and your past bookings.</p>
+              <h2>Service History</h2>
+              <p>Review all your services including completed work and notes.</p>
               <div class="panel">
-                <h3>All Your Bookings</h3>
+                <h3>Booking History</h3>
                 <div class="divider"></div>
                 <table class="table" id="historyTable"></table>
               </div>
@@ -700,12 +781,20 @@
 
             <!-- ADMIN VIEWS -->
             <div class="view" id="a_home">
-              <h2>Admin Overview 🧑‍💼</h2>
-              <p>Manage service bookings, customers, and vehicles with full admin control.</p>
+              <h2>Admin Overview</h2>
+              <p>Manage customers, vehicles and service operations efficiently.</p>
+
+              <div class="banner-mini">
+                <img alt="Admin dashboard" src="https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1400&q=80">
+                <div class="text">
+                  <b>Admin Operations Center</b>
+                  <span>Update service status & manage customer ecosystem</span>
+                </div>
+              </div>
 
               <div class="grid-2">
                 <div class="panel">
-                  <h3>📋 Admin Actions</h3>
+                  <h3>Admin Actions</h3>
                   <div class="divider"></div>
                   <div class="inline">
                     <button class="btn primary" onclick="openView('a_bookings')">View Bookings</button>
@@ -714,7 +803,7 @@
                   </div>
                 </div>
                 <div class="panel">
-                  <h3>📊 System Summary</h3>
+                  <h3>System Summary</h3>
                   <div class="divider"></div>
                   <div class="hint" id="adminSummary">Loading...</div>
                 </div>
@@ -722,8 +811,8 @@
             </div>
 
             <div class="view" id="a_bookings">
-              <h2>All Service Bookings 📋</h2>
-              <p>Update status (Pending → In Progress → Completed).</p>
+              <h2>All Service Bookings</h2>
+              <p>Update status: Pending → In Progress → Completed.</p>
 
               <div class="panel">
                 <h3>Bookings List</h3>
@@ -733,8 +822,8 @@
             </div>
 
             <div class="view" id="a_customers">
-              <h2>Manage Customers 👥</h2>
-              <p>View all registered customers and remove if needed.</p>
+              <h2>Manage Customers</h2>
+              <p>View and manage registered customers.</p>
               <div class="panel">
                 <h3>Customers</h3>
                 <div class="divider"></div>
@@ -743,8 +832,8 @@
             </div>
 
             <div class="view" id="a_vehicles">
-              <h2>Manage Vehicles 🚗</h2>
-              <p>View vehicles registered by customers.</p>
+              <h2>Manage Vehicles</h2>
+              <p>All vehicles registered across customers.</p>
               <div class="panel">
                 <h3>All Vehicles</h3>
                 <div class="divider"></div>
@@ -757,7 +846,7 @@
       </div>
 
       <div class="footer-note">
-        ⚡ Built as a Single HTML File • AI Vibrant UI • Made for Sanjay PV
+        Built as a Single HTML File • Professional UI • Made for Sanjay PV
       </div>
     </div>
 
@@ -769,16 +858,12 @@
     /***********************
      * LocalStorage DB
      ***********************/
-    const DBKEY = "VSMS_DB_v1";
+    const DBKEY = "VSMS_DB_v2_PRO";
 
     function loadDB(){
       const raw = localStorage.getItem(DBKEY);
       if(!raw){
-        const init = {
-          customers: [], // {id,name,email,pass,createdAt}
-          vehicles: [],  // {id,customerId,type,brand,model,reg,createdAt}
-          bookings: []   // {id,customerId,vehicleId,serviceType,date,pickup,note,status,createdAt,updatedAt}
-        };
+        const init = { customers: [], vehicles: [], bookings: [] };
         localStorage.setItem(DBKEY, JSON.stringify(init));
         return init;
       }
@@ -787,11 +872,7 @@
     function saveDB(db){ localStorage.setItem(DBKEY, JSON.stringify(db)); }
 
     // Session
-    const SESSION = {
-      role: "guest", // guest | customer | admin
-      customerId: null,
-      customerEmail: null
-    };
+    const SESSION = { role: "guest", customerId: null, customerEmail: null };
 
     /***********************
      * Utils
@@ -809,9 +890,9 @@
     }
 
     function badge(status){
-      if(status==="Pending") return `<span class="badge b-pending">🟡 Pending</span>`;
-      if(status==="In Progress") return `<span class="badge b-progress">🔵 In Progress</span>`;
-      return `<span class="badge b-done">🟢 Completed</span>`;
+      if(status==="Pending") return `<span class="badge b-pending">Pending</span>`;
+      if(status==="In Progress") return `<span class="badge b-progress">In Progress</span>`;
+      return `<span class="badge b-done">Completed</span>`;
     }
 
     function setModePill(){
@@ -849,25 +930,34 @@
 
     function openAbout(){
       alert(
-`Vehicle Service Management System (Single HTML)
-✅ Customer: Register/Login, Add Vehicle, Book Service, View Status/History
+`Vehicle Service Management System (Professional UI)
+✅ Customer: Register/Login, Add Vehicle, Book Service, Status/History
 ✅ Admin: Login, View Bookings, Update Status, Manage Customers/Vehicles
-✨ AI Vibrant UI + LocalStorage Database (No backend)`
+✅ Single HTML + LocalStorage (No backend)`
       );
     }
 
     /***********************
-     * Register / Login
+     * Register / Login (Improved)
      ***********************/
     function openRegister(){
-      const name = prompt("Enter your name:");
-      if(!name) return;
+      const name = prompt("Enter your full name:");
+      if(!name || name.trim().length < 2){
+        toast("Please enter a valid name.");
+        return;
+      }
 
       const email = (document.getElementById("cEmail").value || "").trim().toLowerCase();
-      if(!email){ toast("Enter email in login box first."); return; }
-
       const pass = (document.getElementById("cPass").value || "").trim();
-      if(pass.length < 4){ toast("Password must be at least 4 characters."); return; }
+
+      if(!email || !email.includes("@")){
+        toast("Enter a valid email in the login box first.");
+        return;
+      }
+      if(pass.length < 4){
+        toast("Password must be at least 4 characters.");
+        return;
+      }
 
       const db = loadDB();
       if(db.customers.some(c => c.email === email)){
@@ -875,11 +965,11 @@
         return;
       }
 
-      const customer = { id: uid("CUS"), name, email, pass, createdAt: nowISO() };
+      const customer = { id: uid("CUS"), name: name.trim(), email, pass, createdAt: nowISO() };
       db.customers.push(customer);
       saveDB(db);
 
-      toast("Registered successfully ✅ Now login.");
+      toast("Registration successful ✅ Now login.");
     }
 
     function customerLogin(){
@@ -888,14 +978,17 @@
 
       const db = loadDB();
       const user = db.customers.find(c => c.email === email && c.pass === pass);
-      if(!user){ toast("Invalid customer login ❌"); return; }
+      if(!user){
+        toast("Invalid customer login ❌");
+        return;
+      }
 
       SESSION.role="customer";
       SESSION.customerId=user.id;
       SESSION.customerEmail=user.email;
 
       openDashboard();
-      toast("Welcome, " + user.name + " ✨");
+      toast("Welcome, " + user.name + " ✅");
     }
 
     function adminLogin(){
@@ -952,16 +1045,13 @@
     }
 
     function openView(id, btn=null){
-      // hide all views
       document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
       const target = document.getElementById(id);
       if(target) target.classList.add("active");
 
-      // menu highlight
       document.querySelectorAll(".menu button").forEach(b => b.classList.remove("active"));
       if(btn) btn.classList.add("active");
 
-      // Refresh tables if needed
       if(id==="c_vehicle") refreshVehicleTable();
       if(id==="c_book") refreshBookingForm();
       if(id==="c_status") refreshStatus();
@@ -985,14 +1075,13 @@
       const reg = document.getElementById("vReg").value.trim().toUpperCase();
 
       if(!brand || !model || !reg){
-        toast("Fill all vehicle fields ❗");
+        toast("Fill all vehicle fields.");
         return;
       }
 
       const db = loadDB();
-      // prevent duplicate reg for same customer
       if(db.vehicles.some(v => v.customerId===SESSION.customerId && v.reg===reg)){
-        toast("Vehicle registration already added.");
+        toast("This registration already exists.");
         return;
       }
 
@@ -1009,8 +1098,7 @@
       document.getElementById("vReg").value="";
 
       toast("Vehicle added ✅");
-      refreshVehicleTable();
-      refreshCustomerSummary();
+      refreshCustomerAll();
     }
 
     function refreshVehicleTable(){
@@ -1033,25 +1121,21 @@
             <td>${v.brand}</td>
             <td>${v.model}</td>
             <td>${v.reg}</td>
-            <td>
-              <button class="btn mini danger" onclick="deleteVehicle('${v.id}')">Delete</button>
-            </td>
+            <td><button class="btn mini danger" onclick="deleteVehicle('${v.id}')">Delete</button></td>
           </tr>
         `).join("")}
       `;
     }
 
     function deleteVehicle(vehicleId){
-      if(!confirm("Delete this vehicle?")) return;
+      if(!confirm("Delete this vehicle? Related bookings will be removed.")) return;
       const db = loadDB();
 
-      // also remove related bookings
       db.bookings = db.bookings.filter(b => b.vehicleId !== vehicleId);
       db.vehicles = db.vehicles.filter(v => v.id !== vehicleId);
 
       saveDB(db);
       toast("Vehicle deleted ✅");
-      refreshVehicleTable();
       refreshCustomerAll();
     }
 
@@ -1066,7 +1150,6 @@
         sel.innerHTML = myVehicles.map(v => `<option value="${v.id}">${v.reg} • ${v.brand} ${v.model}</option>`).join("");
       }
 
-      // set today as min date
       const d = new Date();
       const iso = d.toISOString().slice(0,10);
       document.getElementById("bookDate").min = iso;
@@ -1081,11 +1164,11 @@
       const note = document.getElementById("bookNote").value.trim();
 
       if(!vehicleId){
-        toast("Add/select a vehicle first.");
+        toast("Please select a vehicle.");
         return;
       }
       if(!date){
-        toast("Choose a date.");
+        toast("Please select a date.");
         return;
       }
 
@@ -1105,28 +1188,27 @@
       saveDB(db);
 
       document.getElementById("bookNote").value="";
-      toast("Service booked ✅ Status: Pending");
+      toast("Booking confirmed ✅");
       refreshCustomerAll();
       openView("c_status");
     }
 
     function refreshStatus(){
       const db = loadDB();
-      const myBookings = db.bookings.filter(b => b.customerId===SESSION.customerId)
+      const myBookings = db.bookings
+        .filter(b => b.customerId===SESSION.customerId)
         .sort((a,b)=> (b.createdAt||"").localeCompare(a.createdAt||""));
 
-      const table = document.getElementById("statusTable");
       const active = myBookings.filter(b => b.status !== "Completed");
+      const table = document.getElementById("statusTable");
 
       if(!active.length){
-        table.innerHTML = `<tr><td class="hint">No active services. Book a service to see status.</td></tr>`;
+        table.innerHTML = `<tr><td class="hint">No active services.</td></tr>`;
         return;
       }
 
       table.innerHTML = `
-        <tr>
-          <th>Vehicle</th><th>Service</th><th>Date</th><th>Status</th>
-        </tr>
+        <tr><th>Vehicle</th><th>Service</th><th>Date</th><th>Status</th></tr>
         ${active.map(b=>{
           const v = db.vehicles.find(x=>x.id===b.vehicleId);
           const label = v ? `${v.reg} • ${v.brand} ${v.model}` : "Vehicle Deleted";
@@ -1144,7 +1226,8 @@
 
     function refreshHistory(){
       const db = loadDB();
-      const myBookings = db.bookings.filter(b => b.customerId===SESSION.customerId)
+      const myBookings = db.bookings
+        .filter(b => b.customerId===SESSION.customerId)
         .sort((a,b)=> (b.createdAt||"").localeCompare(a.createdAt||""));
 
       const table = document.getElementById("historyTable");
@@ -1154,9 +1237,7 @@
       }
 
       table.innerHTML = `
-        <tr>
-          <th>Vehicle</th><th>Service</th><th>Date</th><th>Status</th><th>Notes</th>
-        </tr>
+        <tr><th>Vehicle</th><th>Service</th><th>Date</th><th>Status</th><th>Notes</th></tr>
         ${myBookings.map(b=>{
           const v = db.vehicles.find(x=>x.id===b.vehicleId);
           const label = v ? `${v.reg}` : "Vehicle Deleted";
@@ -1166,7 +1247,7 @@
               <td>${b.serviceType}</td>
               <td>${b.date}</td>
               <td>${badge(b.status)}</td>
-              <td>${(b.note||"-").slice(0,60)}</td>
+              <td>${(b.note||"-").slice(0,70)}</td>
             </tr>
           `;
         }).join("")}
@@ -1203,24 +1284,21 @@
      ***********************/
     function refreshAdminBookings(){
       const db = loadDB();
-      const table = document.getElementById("adminBookingTable");
       const all = [...db.bookings].sort((a,b)=> (b.createdAt||"").localeCompare(a.createdAt||""));
+      const table = document.getElementById("adminBookingTable");
 
       if(!all.length){
-        table.innerHTML = `<tr><td class="hint">No service bookings yet.</td></tr>`;
+        table.innerHTML = `<tr><td class="hint">No bookings yet.</td></tr>`;
         return;
       }
 
       table.innerHTML = `
-        <tr>
-          <th>Customer</th><th>Vehicle</th><th>Service</th><th>Date</th><th>Status</th><th>Update</th>
-        </tr>
+        <tr><th>Customer</th><th>Vehicle</th><th>Service</th><th>Date</th><th>Status</th><th>Update</th></tr>
         ${all.map(b=>{
           const c = db.customers.find(x=>x.id===b.customerId);
           const v = db.vehicles.find(x=>x.id===b.vehicleId);
           const cust = c ? `${c.name} (${c.email})` : "Deleted Customer";
           const veh = v ? `${v.reg} • ${v.brand} ${v.model}` : "Vehicle Deleted";
-
           return `
             <tr class="row">
               <td>${cust}</td>
@@ -1257,15 +1335,14 @@
     function refreshAdminCustomers(){
       const db = loadDB();
       const table = document.getElementById("customerTable");
+
       if(!db.customers.length){
         table.innerHTML = `<tr><td class="hint">No customers registered.</td></tr>`;
         return;
       }
 
       table.innerHTML = `
-        <tr>
-          <th>Name</th><th>Email</th><th>Created</th><th>Action</th>
-        </tr>
+        <tr><th>Name</th><th>Email</th><th>Created</th><th>Action</th></tr>
         ${db.customers.map(c=>`
           <tr class="row">
             <td>${c.name}</td>
@@ -1278,14 +1355,14 @@
     }
 
     function adminDeleteCustomer(customerId){
-      if(!confirm("Remove this customer? All vehicles and bookings will be removed.")) return;
+      if(!confirm("Remove customer? All vehicles & bookings will be removed.")) return;
 
       const db = loadDB();
       db.bookings = db.bookings.filter(b=>b.customerId !== customerId);
       db.vehicles = db.vehicles.filter(v=>v.customerId !== customerId);
       db.customers = db.customers.filter(c=>c.id !== customerId);
-
       saveDB(db);
+
       toast("Customer removed ✅");
       refreshAdminAll();
     }
@@ -1293,15 +1370,14 @@
     function refreshAdminVehicles(){
       const db = loadDB();
       const table = document.getElementById("allVehiclesTable");
+
       if(!db.vehicles.length){
         table.innerHTML = `<tr><td class="hint">No vehicles registered.</td></tr>`;
         return;
       }
 
       table.innerHTML = `
-        <tr>
-          <th>Owner</th><th>Type</th><th>Brand</th><th>Model</th><th>Reg</th><th>Action</th>
-        </tr>
+        <tr><th>Owner</th><th>Type</th><th>Brand</th><th>Model</th><th>Reg</th><th>Action</th></tr>
         ${db.vehicles.map(v=>{
           const c = db.customers.find(x=>x.id===v.customerId);
           const owner = c ? `${c.name} (${c.email})` : "Deleted Customer";
@@ -1320,7 +1396,7 @@
     }
 
     function adminDeleteVehicle(vehicleId){
-      if(!confirm("Remove this vehicle? Related bookings will also be removed.")) return;
+      if(!confirm("Remove vehicle? Related bookings will also be removed.")) return;
 
       const db = loadDB();
       db.bookings = db.bookings.filter(b=>b.vehicleId !== vehicleId);
@@ -1358,16 +1434,15 @@
      * Reset Demo
      ***********************/
     function resetDemo(){
-      if(!confirm("Reset all stored data? This will clear customers, vehicles & bookings.")) return;
+      if(!confirm("Reset all stored data? This clears customers, vehicles & bookings.")) return;
       localStorage.removeItem(DBKEY);
-      toast("Data reset ✅ Refreshing...");
-      setTimeout(()=> location.reload(), 700);
+      toast("Data reset ✅ Reloading...");
+      setTimeout(()=> location.reload(), 650);
     }
 
     // On load
     window.addEventListener("load", ()=>{
       setModePill();
-      // Ensure DB exists
       loadDB();
     });
   </script>
