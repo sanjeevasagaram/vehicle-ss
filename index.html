@@ -3,1420 +3,1190 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>Vehicle Service Management System | Pro UI</title>
-
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <title>Vehicle Service Management System</title>
 
   <style>
     :root{
-      /* Pro palette */
-      --bg:#06070b;
-      --bg2:#0a0d16;
-      --card: rgba(255,255,255,0.07);
-      --card2: rgba(255,255,255,0.10);
-      --stroke: rgba(255,255,255,0.12);
-      --text: rgba(255,255,255,0.92);
-      --muted: rgba(255,255,255,0.70);
-
-      --accent: #2ee8ff;
-      --accent2:#8a5bff;
-      --accent3:#00ffa3;
-
-      --danger:#ff4d6d;
-      --warn:#ffd166;
-      --ok:#00ffa3;
-
-      --shadow: 0 30px 80px rgba(0,0,0,0.55);
-      --radius: 22px;
+      --bg1:#070A12;
+      --bg2:#0B1020;
+      --card: rgba(255,255,255,0.06);
+      --card2: rgba(255,255,255,0.09);
+      --border: rgba(255,255,255,0.10);
+      --txt:#EAF0FF;
+      --muted: rgba(234,240,255,0.72);
+      --accent:#6D5BFF;
+      --accent2:#00E5FF;
+      --good:#22C55E;
+      --warn:#FBBF24;
+      --bad:#FF4D6D;
+      --shadow: 0 22px 60px rgba(0,0,0,0.55);
+      --radius: 18px;
+      --radius2: 26px;
+      --blur: blur(10px);
     }
 
-    *{box-sizing:border-box;margin:0;padding:0;font-family:"Outfit", system-ui, Segoe UI, Arial;}
-    html{scroll-behavior:smooth;}
+    *{box-sizing:border-box}
     body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--txt);
       min-height:100vh;
-      color:var(--text);
-      overflow-x:hidden;
       background:
-        radial-gradient(900px 480px at 10% 12%, rgba(46,232,255,0.14), transparent 60%),
-        radial-gradient(820px 460px at 90% 20%, rgba(138,91,255,0.16), transparent 60%),
-        radial-gradient(900px 520px at 55% 95%, rgba(0,255,163,0.11), transparent 60%),
-        linear-gradient(180deg, var(--bg), var(--bg2));
+        radial-gradient(1200px 600px at 18% 10%, rgba(109,91,255,0.20), transparent 55%),
+        radial-gradient(900px 600px at 80% 20%, rgba(0,229,255,0.12), transparent 55%),
+        radial-gradient(700px 500px at 30% 90%, rgba(34,197,94,0.10), transparent 55%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
     }
 
-    /* Professional animated mesh */
-    .mesh{
-      position:fixed; inset:0; z-index:-2; pointer-events:none;
-      opacity:0.45;
-      background:
-        repeating-linear-gradient(
-          90deg,
-          rgba(255,255,255,0.06) 0px,
-          rgba(255,255,255,0.06) 1px,
-          transparent 1px,
-          transparent 80px
-        ),
-        repeating-linear-gradient(
-          0deg,
-          rgba(255,255,255,0.05) 0px,
-          rgba(255,255,255,0.05) 1px,
-          transparent 1px,
-          transparent 80px
-        );
-      mask-image: radial-gradient(circle at 50% 50%, black 0%, transparent 70%);
-    }
-
-    .spotlight{
-      position:fixed; inset:-20%;
-      pointer-events:none;
-      z-index:-1;
-      background: radial-gradient(circle at 25% 15%, rgba(46,232,255,0.17), transparent 40%),
-                  radial-gradient(circle at 80% 30%, rgba(138,91,255,0.16), transparent 42%),
-                  radial-gradient(circle at 55% 95%, rgba(0,255,163,0.12), transparent 45%);
-      filter: blur(50px);
-      animation: drift 12s ease-in-out infinite;
-    }
-    @keyframes drift{
-      0%,100%{transform: translate(0,0) scale(1);}
-      50%{transform: translate(35px,-20px) scale(1.05);}
-    }
-
-    /* Navbar */
+    /* Top Bar */
     .topbar{
-      position:sticky; top:0; z-index:50;
-      backdrop-filter: blur(14px);
-      background: rgba(6,7,11,0.62);
-      border-bottom: 1px solid rgba(255,255,255,0.10);
+      position:sticky;
+      top:0;
+      z-index:50;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+      padding:16px 22px;
+      backdrop-filter: var(--blur);
+      background: rgba(10,14,26,0.70);
+      border-bottom:1px solid var(--border);
     }
-    .topbar-inner{
-      max-width:1200px; margin:auto;
-      padding: 14px 16px;
-      display:flex; justify-content:space-between; align-items:center; gap:14px;
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
     }
-
-    .brand{display:flex; align-items:center; gap:12px;}
     .logo{
       width:44px;height:44px;border-radius:14px;
-      background: linear-gradient(135deg, rgba(46,232,255,1), rgba(138,91,255,1));
-      box-shadow: 0 0 26px rgba(46,232,255,0.18), 0 0 32px rgba(138,91,255,0.14);
-      position:relative; overflow:hidden;
-    }
-    .logo:after{
-      content:"";
-      position:absolute; inset:-40%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
-      transform: rotate(25deg);
-      animation: shine 2.4s linear infinite;
-    }
-    @keyframes shine{
-      0%{transform: translateX(-80%) rotate(25deg);}
-      100%{transform: translateX(120%) rotate(25deg);}
-    }
-
-    .brand-title{font-weight:900; letter-spacing:0.4px;}
-    .brand-sub{color:var(--muted); font-weight:600; font-size:12.5px; margin-top:2px;}
-
-    .top-actions{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
-
-    .pill{
-      display:inline-flex; align-items:center; gap:10px;
-      padding:8px 12px; border-radius:999px;
-      background: rgba(255,255,255,0.07);
-      border:1px solid rgba(255,255,255,0.12);
-      font-weight:700; font-size:13px;
-      box-shadow: inset 0 0 20px rgba(255,255,255,0.03);
-    }
-    .pill b{
-      color: var(--accent);
+      background:
+        radial-gradient(15px 15px at 35% 35%, rgba(255,255,255,0.65), transparent 60%),
+        linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 12px 28px rgba(109,91,255,0.28);
+      display:grid;place-items:center;
       font-weight:900;
+      letter-spacing:0.5px;
+    }
+    .brand h1{
+      margin:0;
+      font-size:15px;
+      letter-spacing:0.5px;
+      font-weight:800;
+    }
+    .brand p{
+      margin:0;
+      font-size:12px;
+      color:var(--muted);
     }
 
+    .top-actions{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .pill{
+      padding:9px 12px;
+      font-size:12px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,0.05);
+      border-radius:999px;
+      color:var(--muted);
+    }
     .btn{
       cursor:pointer;
       border:none;
-      padding: 10px 14px;
-      border-radius: 14px;
-      font-weight:900;
-      color: var(--text);
+      border-radius:12px;
+      padding:10px 12px;
+      font-weight:700;
+      color:var(--txt);
       background: rgba(255,255,255,0.08);
-      border:1px solid rgba(255,255,255,0.12);
-      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-      user-select:none;
+      border:1px solid var(--border);
+      transition: 0.2s ease;
     }
-    .btn:hover{
-      transform: translateY(-1px);
-      border-color: rgba(46,232,255,0.25);
-      box-shadow: 0 0 26px rgba(46,232,255,0.06);
-    }
+    .btn:hover{transform:translateY(-1px); background: rgba(255,255,255,0.10)}
     .btn.primary{
-      background: linear-gradient(135deg, rgba(46,232,255,0.95), rgba(138,91,255,0.85));
-      color:#071018;
       border:none;
-      box-shadow: 0 20px 40px rgba(46,232,255,0.08), 0 20px 50px rgba(138,91,255,0.07);
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 18px 45px rgba(0,229,255,0.10);
     }
     .btn.danger{
       background: rgba(255,77,109,0.12);
-      border:1px solid rgba(255,77,109,0.35);
-      color:#ffdbe3;
+      border:1px solid rgba(255,77,109,0.25);
     }
-    .btn.mini{padding: 8px 12px; border-radius: 12px; font-size:13px;}
 
     /* Layout */
     .container{
       max-width:1200px;
-      margin: 24px auto;
-      padding: 0 16px 50px;
+      margin:0 auto;
+      padding:22px;
     }
-
-    /* Hero (with car image) */
-    .hero{
+    .grid{
       display:grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap:16px;
-      margin-top: 16px;
+      grid-template-columns: 330px 1fr;
+      gap:18px;
     }
-    @media (max-width: 920px){
-      .hero{grid-template-columns:1fr;}
+    @media (max-width:980px){
+      .grid{grid-template-columns:1fr}
     }
 
-    .card{
-      background: var(--card);
-      border:1px solid rgba(255,255,255,0.12);
-      border-radius: var(--radius);
+    /* Sidebar */
+    .side{
+      border:1px solid var(--border);
+      border-radius: var(--radius2);
+      background: rgba(255,255,255,0.03);
       box-shadow: var(--shadow);
       overflow:hidden;
-      position:relative;
     }
-    .card-inner{position:relative; padding: 18px;}
-    .soft-glow{
-      position:absolute; inset:-120px;
-      background: radial-gradient(circle at 30% 20%, rgba(46,232,255,0.14), transparent 55%),
-                  radial-gradient(circle at 75% 30%, rgba(138,91,255,0.14), transparent 60%),
-                  radial-gradient(circle at 50% 90%, rgba(0,255,163,0.10), transparent 60%);
-      pointer-events:none;
+    .side header{
+      padding:18px 18px 12px;
+      border-bottom:1px solid var(--border);
+      background: rgba(255,255,255,0.04);
     }
-
-    .hero-banner{
-      display:grid; grid-template-columns: 1.05fr 0.95fr; gap:16px; align-items:center;
-    }
-    @media (max-width: 920px){
-      .hero-banner{grid-template-columns:1fr;}
-    }
-
-    .title{
-      font-size: 34px;
-      font-weight: 1000;
-      line-height: 1.08;
-      letter-spacing: 0.2px;
-    }
-    .subtitle{
-      margin-top: 10px;
-      color: var(--muted);
-      font-weight: 600;
-      line-height:1.65;
-    }
-    .hero-car{
-      width:100%;
-      border-radius: 20px;
-      overflow:hidden;
-      border:1px solid rgba(255,255,255,0.12);
-      background: rgba(0,0,0,0.25);
-      position:relative;
-      min-height: 240px;
-      box-shadow: 0 30px 70px rgba(0,0,0,0.45);
-      transform: translateZ(0);
-    }
-    .hero-car img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-      filter: contrast(1.05) saturate(1.1);
-      opacity:0.95;
-      transform: scale(1.04);
-    }
-    .hero-car:after{
-      content:"";
-      position:absolute; inset:0;
-      background: linear-gradient(120deg, rgba(6,7,11,0.25), rgba(6,7,11,0.75));
-    }
-    .hero-car .tag{
-      position:absolute; left:14px; bottom:14px; z-index:2;
-      padding: 8px 12px;
-      border-radius: 999px;
+    .side header h2{
+      margin:0;
+      font-size:15px;
       font-weight:900;
-      font-size:13px;
-      background: rgba(0,0,0,0.55);
-      border:1px solid rgba(255,255,255,0.14);
-      backdrop-filter: blur(10px);
+      letter-spacing:0.4px;
     }
-    .tag b{color: var(--accent);}
-
-    .chips{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;}
-    .chip{
-      padding: 9px 12px;
-      border-radius: 999px;
-      border:1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.05);
+    .side header span{
+      display:inline-block;
+      margin-top:8px;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .nav{
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .nav button{
+      width:100%;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:flex-start;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color:var(--txt);
+      cursor:pointer;
       font-weight:800;
-      font-size: 13px;
+      transition: 0.2s;
     }
-    .chip.ai{border-color: rgba(46,232,255,0.28);}
-    .chip.sec{border-color: rgba(138,91,255,0.28);}
-    .chip.fast{border-color: rgba(0,255,163,0.24);}
-
-    .divider{height:1px;background:rgba(255,255,255,0.10); margin: 14px 0;}
-    .hint{font-size:13px;color: rgba(255,255,255,0.68); line-height:1.6;}
-    .small{font-size:12px;font-weight:700;color: rgba(255,255,255,0.60);}
-
-    /* Auth tabs */
-    .tabs{
-      display:flex; gap:10px; padding:10px;
-      border-radius: 18px;
-      background: rgba(0,0,0,0.22);
-      border:1px solid rgba(255,255,255,0.10);
+    .nav button:hover{ background: rgba(255,255,255,0.06); transform:translateY(-1px)}
+    .nav button.active{
+      border:none;
+      background: linear-gradient(135deg, rgba(109,91,255,0.30), rgba(0,229,255,0.18));
+      box-shadow: 0 16px 35px rgba(109,91,255,0.12);
     }
-    .tab{
-      flex:1;
-      text-align:center;
-      padding:10px;
-      border-radius: 14px;
-      font-weight: 1000;
-      cursor:pointer;
-      color: rgba(255,255,255,0.65);
-      transition: 0.18s ease;
-      border:1px solid transparent;
-    }
-    .tab.active{
-      color:#071018;
-      background: linear-gradient(135deg, rgba(46,232,255,0.95), rgba(138,91,255,0.85));
-      box-shadow: 0 18px 40px rgba(46,232,255,0.10);
-    }
-
-    .form{margin-top:12px; display:flex; flex-direction:column; gap:10px;}
-    .field{display:flex; flex-direction:column; gap:6px;}
-    .field label{font-weight:900; font-size:13px; color: rgba(255,255,255,0.85);}
-
-    .field input, .field select, .field textarea{
-      padding: 12px;
-      border-radius: 14px;
-      outline:none;
-      border:1px solid rgba(255,255,255,0.14);
-      background: rgba(0,0,0,0.28);
-      color: var(--text);
-      font-weight: 700;
-      transition: 0.18s ease;
-    }
-    .field textarea{min-height: 90px; resize: vertical;}
-    .field input:focus, .field select:focus, .field textarea:focus{
-      border-color: rgba(46,232,255,0.40);
-      box-shadow: 0 0 0 4px rgba(46,232,255,0.08);
-    }
-    .inline{display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
-
-    /* Dashboard */
-    .dash{display:none; margin-top:18px;}
-
-    .dash-grid{
-      display:grid;
-      grid-template-columns: 320px 1fr;
-      gap:16px;
-    }
-    @media (max-width: 980px){
-      .dash-grid{grid-template-columns:1fr;}
-    }
-
-    .sidebar{padding:16px;}
-    .side-title{font-size:16px;font-weight:1000;letter-spacing:0.2px;}
-    .side-user{
-      margin-top:10px;
-      padding: 12px;
-      border-radius: 16px;
+    .icon{
+      width:34px;height:34px;
+      border-radius:12px;
+      display:grid;place-items:center;
       background: rgba(255,255,255,0.06);
-      border:1px solid rgba(255,255,255,0.10);
-    }
-    .side-user b{color: var(--accent);}
-
-    .menu{margin-top:12px; display:flex; flex-direction:column; gap:10px;}
-    .menu button{
-      text-align:left; width:100%;
-      border-radius: 16px;
-      padding: 12px;
-      font-weight: 1000;
-      cursor:pointer;
-      background: rgba(255,255,255,0.06);
-      border:1px solid rgba(255,255,255,0.10);
-      color: var(--text);
-      transition: 0.18s ease;
-    }
-    .menu button:hover{
-      transform: translateY(-1px);
-      border-color: rgba(138,91,255,0.25);
-      box-shadow: 0 0 22px rgba(138,91,255,0.06);
-    }
-    .menu button.active{
-      background: linear-gradient(135deg, rgba(46,232,255,0.14), rgba(138,91,255,0.12));
-      border-color: rgba(46,232,255,0.26);
+      border:1px solid var(--border);
+      font-size:16px;
     }
 
-    .content{padding:16px;}
-    .content h2{font-size: 22px; font-weight:1000;}
-    .content p{margin-top:8px; color: var(--muted); line-height:1.7; font-weight:600;}
-
-    .banner-mini{
-      margin-top:14px;
-      border-radius: 20px;
+    /* Main Panel */
+    .main{
+      border:1px solid var(--border);
+      border-radius: var(--radius2);
+      background: rgba(255,255,255,0.03);
+      box-shadow: var(--shadow);
       overflow:hidden;
-      border:1px solid rgba(255,255,255,0.10);
-      background: rgba(0,0,0,0.25);
-      position:relative;
-      height: 190px;
     }
-    .banner-mini img{
-      width:100%; height:100%; object-fit:cover; display:block;
-      filter: contrast(1.06) saturate(1.08);
-      transform: scale(1.03);
-      opacity: 0.9;
+    .main header{
+      padding:18px;
+      border-bottom:1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:18px;
     }
-    .banner-mini:after{
-      content:"";
-      position:absolute; inset:0;
-      background: linear-gradient(120deg, rgba(6,7,11,0.30), rgba(6,7,11,0.82));
+    .main header h2{
+      margin:0;
+      font-size:16px;
+      font-weight:900;
+      letter-spacing:0.35px;
     }
-    .banner-mini .text{
-      position:absolute; inset:0; z-index:2;
-      padding: 16px;
-      display:flex; flex-direction:column; justify-content:flex-end;
-      gap:6px;
+    .main header p{
+      margin:8px 0 0;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.55;
+      max-width:680px;
     }
-    .banner-mini .text b{font-weight:1000;}
-    .banner-mini .text span{color: rgba(255,255,255,0.78); font-weight:650;}
 
-    .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top: 12px;}
-    @media (max-width: 850px){ .grid-2{grid-template-columns:1fr;}}
-
-    .panel{
-      padding:16px;
-      border-radius: 20px;
-      background: rgba(255,255,255,0.05);
-      border:1px solid rgba(255,255,255,0.10);
-      position:relative; overflow:hidden;
+    /* Cards */
+    .content{
+      padding:18px;
     }
-    .panel:before{
-      content:"";
-      position:absolute; inset:-60px;
-      background: radial-gradient(circle at 18% 18%, rgba(46,232,255,0.10), transparent 50%),
-                  radial-gradient(circle at 85% 35%, rgba(138,91,255,0.10), transparent 55%);
-      pointer-events:none;
+    .cards{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
     }
-    .panel > *{position:relative;}
-    .panel h3{font-weight: 1000; font-size:16px;}
+    @media (max-width:980px){
+      .cards{grid-template-columns:1fr}
+    }
+    .card{
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.04);
+      overflow:hidden;
+    }
+    .card .hd{
+      padding:14px 14px 10px;
+      border-bottom:1px solid var(--border);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+    .card .hd h3{
+      margin:0;
+      font-size:13px;
+      letter-spacing:0.25px;
+      font-weight:900;
+    }
+    .tag{
+      font-size:11px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color:var(--muted);
+    }
+    .card .bd{padding:14px}
 
+    /* Form */
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width:680px){
+      .row{grid-template-columns:1fr}
+    }
+    label{
+      font-size:12px;
+      color:var(--muted);
+      font-weight:700;
+      display:block;
+      margin-bottom:6px;
+    }
+    input, select, textarea{
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      outline:none;
+      border:1px solid var(--border);
+      background: rgba(10,14,26,0.65);
+      color:var(--txt);
+      font-weight:700;
+    }
+    textarea{min-height:90px; resize:vertical}
+    .form-actions{
+      margin-top:12px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    /* Table */
     .table{
       width:100%;
-      border-collapse: separate;
-      border-spacing: 0 10px;
-      margin-top: 10px;
+      border-collapse:collapse;
+      overflow:hidden;
+      border-radius:16px;
+    }
+    .table th, .table td{
+      padding:12px 10px;
+      border-bottom:1px solid rgba(255,255,255,0.08);
+      font-size:12px;
+      text-align:left;
     }
     .table th{
-      text-align:left;
-      font-size:12px;
-      color: rgba(255,255,255,0.74);
-      padding: 8px 10px;
-    }
-    .row{
-      background: rgba(0,0,0,0.28);
-      border:1px solid rgba(255,255,255,0.10);
-      transition: 0.18s ease;
-    }
-    .row:hover{
-      transform: translateY(-1px);
-      border-color: rgba(46,232,255,0.18);
-      box-shadow: 0 0 26px rgba(46,232,255,0.05);
-    }
-    .table td{
-      padding: 12px 10px;
-      font-weight:750;
-      color: rgba(255,255,255,0.90);
-    }
-    .row td:first-child{border-top-left-radius: 14px; border-bottom-left-radius: 14px;}
-    .row td:last-child{border-top-right-radius: 14px; border-bottom-right-radius: 14px;}
-
-    .badge{
-      display:inline-flex; align-items:center;
-      padding: 7px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight:1000;
-      border:1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.06);
-    }
-    .b-pending{border-color: rgba(255,209,102,0.55); color:#ffe7b5;}
-    .b-progress{border-color: rgba(46,232,255,0.55); color:#d8feff;}
-    .b-done{border-color: rgba(0,255,163,0.50); color:#d2ffe9;}
-
-    .toast{
-      position:fixed; left:50%; bottom:22px; transform: translateX(-50%);
-      min-width: 280px; max-width: 760px;
-      padding: 12px 14px;
-      border-radius: 16px;
+      color:rgba(234,240,255,0.85);
       font-weight:900;
-      background: rgba(0,0,0,0.60);
-      border:1px solid rgba(255,255,255,0.14);
-      backdrop-filter: blur(14px);
+      letter-spacing:0.3px;
+      background: rgba(255,255,255,0.04);
+    }
+
+    .status{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:7px 10px;
+      border-radius:999px;
+      font-weight:900;
+      font-size:11px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,0.05);
+    }
+    .dot{width:9px;height:9px;border-radius:99px; display:inline-block}
+    .s-pending{ border-color: rgba(251,191,36,0.25); background: rgba(251,191,36,0.09);}
+    .s-progress{ border-color: rgba(0,229,255,0.25); background: rgba(0,229,255,0.09);}
+    .s-completed{ border-color: rgba(34,197,94,0.25); background: rgba(34,197,94,0.09);}
+    .d-pending{background:var(--warn)}
+    .d-progress{background:var(--accent2)}
+    .d-completed{background:var(--good)}
+
+    /* Notifications */
+    .toast{
+      position:fixed;
+      right:18px;
+      bottom:18px;
+      min-width:260px;
+      max-width:340px;
+      padding:14px 14px;
+      border-radius:18px;
+      border:1px solid var(--border);
+      background: rgba(10,14,26,0.72);
+      backdrop-filter: var(--blur);
+      box-shadow: 0 26px 70px rgba(0,0,0,0.5);
       display:none;
-      box-shadow: var(--shadow);
-      z-index: 80;
+      z-index:100;
     }
-    .toast.show{display:block; animation: pop 0.22s ease;}
-    @keyframes pop{from{transform:translateX(-50%) translateY(8px); opacity:0;} to{transform:translateX(-50%) translateY(0); opacity:1;}}
+    .toast strong{display:block; font-size:13px}
+    .toast span{display:block; margin-top:6px; font-size:12px; color:var(--muted); line-height:1.45}
+    .toast.ok{border-color: rgba(34,197,94,0.26)}
+    .toast.warn{border-color: rgba(251,191,36,0.26)}
+    .toast.bad{border-color: rgba(255,77,109,0.26)}
 
-    .footer-note{
-      margin-top: 18px;
-      font-size: 12px;
-      color: rgba(255,255,255,0.55);
-      line-height:1.6;
-      text-align:center;
-    }
-    .danger-text{color:#ffd3db;}
-    .right{display:flex; justify-content:flex-end;}
-
-    .view{display:none;}
-    .view.active{display:block;}
+    .muted{color:var(--muted)}
+    .hide{display:none !important;}
   </style>
 </head>
 
 <body>
-  <div class="mesh"></div>
-  <div class="spotlight"></div>
-
-  <!-- TOPBAR -->
+  <!-- TopBar -->
   <div class="topbar">
-    <div class="topbar-inner">
-      <div class="brand">
-        <div class="logo"></div>
-        <div>
-          <div class="brand-title">Vehicle Service Management</div>
-          <div class="brand-sub">Professional UI • Single HTML • LocalStorage Database</div>
-        </div>
+    <div class="brand">
+      <div class="logo">VS</div>
+      <div>
+        <h1>Vehicle Service Management System</h1>
+        <p>Professional Service Booking & Tracking Panel</p>
       </div>
+    </div>
 
-      <div class="top-actions">
-        <div class="pill">Mode: <b id="modePill">Guest</b></div>
-        <button class="btn mini" onclick="openAbout()">About</button>
-        <button class="btn danger mini" onclick="resetDemo()">Reset Data</button>
-        <button class="btn primary mini" id="logoutBtn" style="display:none" onclick="logout()">Logout</button>
-      </div>
+    <div class="top-actions">
+      <div class="pill" id="sessionPill">Not Logged In</div>
+      <button class="btn" onclick="seedDemo()">Demo Data</button>
+      <button class="btn danger" onclick="resetAll()">Reset</button>
+      <button class="btn primary" onclick="logout()">Logout</button>
     </div>
   </div>
 
   <div class="container">
+    <div class="grid">
+      <!-- Sidebar -->
+      <aside class="side">
+        <header>
+          <h2>Navigation</h2>
+          <span id="roleHint">Login to access features.</span>
+        </header>
+        <div class="nav" id="navButtons">
+          <!-- Buttons injected dynamically -->
+        </div>
+      </aside>
 
-    <!-- HERO / AUTH -->
+      <!-- Main -->
+      <main class="main">
+        <header>
+          <div>
+            <h2 id="pageTitle">Welcome</h2>
+            <p id="pageSubtitle">
+              This is a modern dark UI vehicle service management software. Register/login and start managing service bookings professionally.
+            </p>
+          </div>
+          <div class="pill" id="systemInfo">LocalStorage Mode • Single File</div>
+        </header>
 
-              <div class="hero-car">
-                <!-- Car image -->
-                <img alt="Car service" src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1400&q=80">
-                <div class="tag">🚘 <b>Premium</b> Service Experience</div>
-              </div>
+        <div class="content" id="pageContent"></div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">
+    <strong id="toastTitle">Done</strong>
+    <span id="toastMsg">Action completed.</span>
+  </div>
+
+<script>
+  /***************
+   * Data Layer
+   ***************/
+  const LS = {
+    users: "vsm_users",
+    vehicles: "vsm_vehicles",
+    bookings: "vsm_bookings",
+    session: "vsm_session"
+  };
+
+  function getData(key, fallback){
+    try{ return JSON.parse(localStorage.getItem(key)) ?? fallback; }
+    catch(e){ return fallback; }
+  }
+
+  function setData(key, value){
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  function uid(prefix="ID"){
+    return `${prefix}-${Math.random().toString(16).slice(2,8).toUpperCase()}-${Date.now().toString().slice(-5)}`;
+  }
+
+  function nowStr(){
+    const d = new Date();
+    return d.toLocaleString();
+  }
+
+  function toast(type, title, msg){
+    const t = document.getElementById("toast");
+    t.className = `toast ${type}`;
+    document.getElementById("toastTitle").textContent = title;
+    document.getElementById("toastMsg").textContent = msg;
+    t.style.display = "block";
+    setTimeout(()=> t.style.display="none", 2600);
+  }
+
+  function statusBadge(status){
+    if(status==="Pending"){
+      return `<span class="status s-pending"><span class="dot d-pending"></span>Pending</span>`;
+    }
+    if(status==="In Progress"){
+      return `<span class="status s-progress"><span class="dot d-progress"></span>In Progress</span>`;
+    }
+    return `<span class="status s-completed"><span class="dot d-completed"></span>Completed</span>`;
+  }
+
+  function getSession(){
+    return getData(LS.session, null);
+  }
+
+  function setSession(sess){
+    setData(LS.session, sess);
+  }
+
+  function logout(){
+    setSession(null);
+    toast("warn", "Logged out", "You are now logged out.");
+    render();
+  }
+
+  /***************
+   * Seed / Reset
+   ***************/
+  function seedDemo(){
+    const users = getData(LS.users, []);
+    const already = users.find(u => u.email==="admin@vsm.com");
+    if(!already){
+      users.push({
+        id: uid("USR"),
+        name: "Admin",
+        email: "admin@vsm.com",
+        password: "admin123",
+        role: "admin",
+        createdAt: nowStr()
+      });
+      users.push({
+        id: uid("USR"),
+        name: "Sanjay PV",
+        email: "sanjay@vsm.com",
+        password: "1234",
+        role: "customer",
+        createdAt: nowStr()
+      });
+      setData(LS.users, users);
+    }
+
+    const vehicles = getData(LS.vehicles, []);
+    const customer = users.find(u=>u.email==="sanjay@vsm.com");
+    if(customer && vehicles.filter(v=>v.userId===customer.id).length===0){
+      vehicles.push({
+        id: uid("VEH"),
+        userId: customer.id,
+        ownerName: customer.name,
+        vehicleNo: "KL-13-AB-2026",
+        model: "Hyundai i20",
+        type: "Car",
+        createdAt: nowStr()
+      });
+      setData(LS.vehicles, vehicles);
+
+      const bookings = getData(LS.bookings, []);
+      bookings.push({
+        id: uid("BK"),
+        userId: customer.id,
+        vehicleId: vehicles[vehicles.length-1].id,
+        serviceType: "Full Service",
+        preferredDate: new Date(Date.now()+86400000).toISOString().slice(0,10),
+        notes: "Check engine oil & brakes",
+        status: "Pending",
+        createdAt: nowStr(),
+        updatedAt: nowStr()
+      });
+      setData(LS.bookings, bookings);
+    }
+
+    toast("ok","Demo Ready","Admin: admin@vsm.com / admin123 • Customer: sanjay@vsm.com / 1234");
+    render();
+  }
+
+  function resetAll(){
+    if(!confirm("This will delete ALL data (users, vehicles, bookings). Continue?")) return;
+    localStorage.removeItem(LS.users);
+    localStorage.removeItem(LS.vehicles);
+    localStorage.removeItem(LS.bookings);
+    localStorage.removeItem(LS.session);
+    toast("bad","Reset Completed","All records cleared.");
+    render();
+  }
+
+  /***************
+   * UI Routing
+   ***************/
+  const PAGES = {
+    welcome: {title:"Welcome", subtitle:"Login/Register to start using the vehicle service management system."},
+    register: {title:"Customer Registration", subtitle:"Create your customer account to book services and track status."},
+    login: {title:"Login", subtitle:"Login as Customer or Admin. (Admin can update service progress)."},
+    customer_dashboard: {title:"Customer Dashboard", subtitle:"Manage vehicles, book service, and track history in one place."},
+    add_vehicle: {title:"Add Vehicle", subtitle:"Add vehicle details linked to your customer account."},
+    book_service: {title:"Book Service", subtitle:"Book a service request for any registered vehicle."},
+    service_status: {title:"Service Status", subtitle:"Track current booking status: Pending → In Progress → Completed."},
+    service_history: {title:"Service History", subtitle:"View all completed/previous service bookings."},
+    admin_dashboard: {title:"Admin Dashboard", subtitle:"View all service bookings and update service status in real-time."}
+  };
+
+  function setActiveNav(page){
+    document.querySelectorAll(".nav button").forEach(b=>{
+      b.classList.toggle("active", b.dataset.page===page);
+    });
+  }
+
+  function setHeader(page){
+    document.getElementById("pageTitle").textContent = PAGES[page].title;
+    document.getElementById("pageSubtitle").textContent = PAGES[page].subtitle;
+  }
+
+  function renderNav(){
+    const nav = document.getElementById("navButtons");
+    nav.innerHTML = "";
+
+    const sess = getSession();
+    const roleHint = document.getElementById("roleHint");
+    const sessionPill = document.getElementById("sessionPill");
+
+    if(!sess){
+      sessionPill.textContent = "Not Logged In";
+      roleHint.textContent = "Register or login to continue.";
+      nav.innerHTML = `
+        <button data-page="welcome" onclick="go('welcome')"><span class="icon">🏁</span>Welcome</button>
+        <button data-page="register" onclick="go('register')"><span class="icon">🧾</span>Register</button>
+        <button data-page="login" onclick="go('login')"><span class="icon">🔐</span>Login</button>
+      `;
+      return;
+    }
+
+    sessionPill.textContent = `${sess.role.toUpperCase()} • ${sess.name}`;
+    roleHint.textContent = sess.role === "admin"
+      ? "Admin privileges: update service status"
+      : "Customer: manage vehicles & services";
+
+    if(sess.role === "customer"){
+      nav.innerHTML = `
+        <button data-page="customer_dashboard" onclick="go('customer_dashboard')"><span class="icon">📊</span>Dashboard</button>
+        <button data-page="add_vehicle" onclick="go('add_vehicle')"><span class="icon">🚗</span>Add Vehicle</button>
+        <button data-page="book_service" onclick="go('book_service')"><span class="icon">🛠️</span>Book Service</button>
+        <button data-page="service_status" onclick="go('service_status')"><span class="icon">📍</span>Service Status</button>
+        <button data-page="service_history" onclick="go('service_history')"><span class="icon">🧾</span>Service History</button>
+      `;
+    }else{
+      nav.innerHTML = `
+        <button data-page="admin_dashboard" onclick="go('admin_dashboard')"><span class="icon">🧠</span>Admin Dashboard</button>
+      `;
+    }
+  }
+
+  function go(page){
+    window.__page = page;
+    render();
+  }
+
+  /***************
+   * Pages
+   ***************/
+  function pageWelcome(){
+    return `
+      <div class="cards">
+        <div class="card">
+          <div class="hd"><h3>Modern Service Platform</h3><span class="tag">Dark UI • Standard</span></div>
+          <div class="bd">
+            <p class="muted">
+              This system provides a professional interface for customers to manage vehicle services and for admin to update service progress.
+            </p>
+            <div class="form-actions">
+              <button class="btn primary" onclick="go('register')">Create Customer Account</button>
+              <button class="btn" onclick="go('login')">Login</button>
             </div>
           </div>
         </div>
 
         <div class="card">
-          <div class="soft-glow"></div>
-          <div class="card-inner">
-            <div class="tabs">
-              <div class="tab active" id="tabCustomer" onclick="switchAuth('customer')">Customer</div>
-              <div class="tab" id="tabAdmin" onclick="switchAuth('admin')">Admin</div>
-            </div>
-
-            <!-- CUSTOMER AUTH -->
-            <div id="customerAuth">
-              <div class="form">
-                <div class="field">
-                  <label>Customer Email</label>
-                  <input id="cEmail" type="email" placeholder="example@gmail.com" />
-                </div>
-                <div class="field">
-                  <label>Password</label>
-                  <input id="cPass" type="password" placeholder="••••••••" />
-                </div>
-                <div class="inline">
-                  <button class="btn primary" onclick="customerLogin()">Login</button>
-                  <button class="btn" onclick="openRegister()">Register</button>
-                </div>
-                <div class="hint">
-                  Register once → Login anytime → Add vehicles → Book service.
-                </div>
-              </div>
-            </div>
-
-            <!-- ADMIN AUTH -->
-            <div id="adminAuth" style="display:none">
-              <div class="form">
-                <div class="field">
-                  <label>Admin Username</label>
-                  <input id="aUser" type="text" placeholder="admin" />
-                </div>
-                <div class="field">
-                  <label>Password</label>
-                  <input id="aPass" type="password" placeholder="admin123" />
-                </div>
-                <button class="btn primary" onclick="adminLogin()">Login as Admin</button>
-                <div class="hint">
-                  Admin can update status and manage everything.
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- DASHBOARD -->
-    <div class="dash" id="dashArea">
-      <div class="dash-grid">
-        <div class="card sidebar">
-          <div class="soft-glow"></div>
-          <div class="card-inner">
-            <div class="side-title">Control Panel</div>
-            <div class="side-user">
-              Logged in as: <b id="loggedUser">-</b><br/>
-              Role: <b id="loggedRole">-</b>
-            </div>
-
-            <div class="menu" id="menuCustomer" style="display:none">
-              <button class="active" onclick="openView('c_home', this)">Overview</button>
-              <button onclick="openView('c_vehicle', this)">Add Vehicle</button>
-              <button onclick="openView('c_book', this)">Book Service</button>
-              <button onclick="openView('c_status', this)">Service Status</button>
-              <button onclick="openView('c_history', this)">Service History</button>
-            </div>
-
-            <div class="menu" id="menuAdmin" style="display:none">
-              <button class="active" onclick="openView('a_home', this)">Overview</button>
-              <button onclick="openView('a_bookings', this)">All Bookings</button>
-              <button onclick="openView('a_customers', this)">Manage Customers</button>
-              <button onclick="openView('a_vehicles', this)">Manage Vehicles</button>
-            </div>
-
-            <div class="divider"></div>
-            <div class="hint">
-              Data is stored locally in your browser using <b>LocalStorage</b>.
+          <div class="hd"><h3>Login Credentials (Demo)</h3><span class="tag">Optional</span></div>
+          <div class="bd">
+            <p class="muted"><b>Admin:</b> admin@vsm.com / admin123</p>
+            <p class="muted"><b>Customer:</b> sanjay@vsm.com / 1234</p>
+            <div class="form-actions">
+              <button class="btn" onclick="seedDemo()">Load Demo Data</button>
             </div>
           </div>
         </div>
+      </div>
+    `;
+  }
 
-        <div class="card content">
-          <div class="soft-glow"></div>
-          <div class="card-inner">
-
-            <!-- CUSTOMER VIEWS -->
-            <div class="view active" id="c_home">
-              <h2>Customer Overview</h2>
-              <p>Book services quickly and monitor every stage of your vehicle service process.</p>
-
-              <div class="banner-mini">
-                <img alt="Service workshop" src="https://images.unsplash.com/photo-1487754180451-c456f719a1fc?auto=format&fit=crop&w=1400&q=80">
-                <div class="text">
-                  <b>Track your service in real-time</b>
-                  <span>Professional workflow: Pending → In Progress → Completed</span>
-                </div>
+  function pageRegister(){
+    return `
+      <div class="cards">
+        <div class="card" style="grid-column:1/-1">
+          <div class="hd"><h3>Customer Registration</h3><span class="tag">Secure Local Demo</span></div>
+          <div class="bd">
+            <div class="row">
+              <div>
+                <label>Full Name</label>
+                <input id="reg_name" placeholder="Enter your name" />
               </div>
-
-              <div class="grid-2">
-                <div class="panel">
-                  <h3>Quick Actions</h3>
-                  <div class="divider"></div>
-                  <div class="inline">
-                    <button class="btn primary" onclick="openView('c_book')">Book New Service</button>
-                    <button class="btn" onclick="openView('c_vehicle')">Add Vehicle</button>
-                  </div>
-                </div>
-                <div class="panel">
-                  <h3>Your Summary</h3>
-                  <div class="divider"></div>
-                  <div class="hint" id="customerSummary">Loading...</div>
-                </div>
+              <div>
+                <label>Email</label>
+                <input id="reg_email" placeholder="Enter email" />
               </div>
             </div>
 
-            <div class="view" id="c_vehicle">
-              <h2>Add Vehicle Details</h2>
-              <p>Store your vehicle profile for smooth booking and service tracking.</p>
-
-              <div class="panel">
-                <h3>Vehicle Registration Form</h3>
-                <div class="divider"></div>
-                <div class="grid-2">
-                  <div class="field">
-                    <label>Vehicle Type</label>
-                    <select id="vType">
-                      <option value="Car">Car</option>
-                      <option value="Bike">Bike</option>
-                      <option value="SUV">SUV</option>
-                      <option value="Truck">Truck</option>
-                    </select>
-                  </div>
-                  <div class="field">
-                    <label>Brand</label>
-                    <input id="vBrand" placeholder="e.g., Hyundai / Honda / Tata" />
-                  </div>
-                  <div class="field">
-                    <label>Model</label>
-                    <input id="vModel" placeholder="e.g., i20 / City / Nexon" />
-                  </div>
-                  <div class="field">
-                    <label>Registration Number</label>
-                    <input id="vReg" placeholder="e.g., KL-13-AB-1234" />
-                  </div>
-                </div>
-                <div class="divider"></div>
-                <button class="btn primary" onclick="addVehicle()">Save Vehicle</button>
-
-                <div class="divider"></div>
-                <h3>Your Vehicles</h3>
-                <table class="table" id="vehicleTable"></table>
+            <div class="row" style="margin-top:12px">
+              <div>
+                <label>Password</label>
+                <input id="reg_pass" type="password" placeholder="Create password" />
+              </div>
+              <div>
+                <label>Confirm Password</label>
+                <input id="reg_pass2" type="password" placeholder="Confirm password" />
               </div>
             </div>
 
-            <div class="view" id="c_book">
-              <h2>Book Service</h2>
-              <p>Pick a vehicle, choose service type and book instantly.</p>
-
-              <div class="panel">
-                <h3>Service Booking</h3>
-                <div class="divider"></div>
-                <div class="grid-2">
-                  <div class="field">
-                    <label>Select Your Vehicle</label>
-                    <select id="bookVehicle"></select>
-                  </div>
-                  <div class="field">
-                    <label>Service Type</label>
-                    <select id="bookType">
-                      <option value="General Service">General Service</option>
-                      <option value="Oil Change">Oil Change</option>
-                      <option value="Brake Service">Brake Service</option>
-                      <option value="Full Checkup">Full Checkup</option>
-                      <option value="Engine Diagnostics">Engine Diagnostics</option>
-                      <option value="AC Service">AC Service</option>
-                    </select>
-                  </div>
-                  <div class="field">
-                    <label>Preferred Date</label>
-                    <input id="bookDate" type="date" />
-                  </div>
-                  <div class="field">
-                    <label>Pickup Type</label>
-                    <select id="bookPickup">
-                      <option value="Drop at Service Center">Drop at Service Center</option>
-                      <option value="Pickup & Drop">Pickup & Drop</option>
-                      <option value="Pickup Only">Pickup Only</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="field">
-                  <label>Problem / Notes</label>
-                  <textarea id="bookNote" placeholder="Describe your issue... (optional)"></textarea>
-                </div>
-
-                <div class="divider"></div>
-                <button class="btn primary" onclick="bookService()">Confirm Booking</button>
-              </div>
+            <div class="form-actions">
+              <button class="btn primary" onclick="registerCustomer()">Register</button>
+              <button class="btn" onclick="go('login')">Already have account? Login</button>
             </div>
-
-            <div class="view" id="c_status">
-              <h2>Service Status</h2>
-              <p>Monitor all active service bookings and their current status.</p>
-              <div class="panel">
-                <h3>Active Services</h3>
-                <div class="divider"></div>
-                <table class="table" id="statusTable"></table>
-              </div>
-            </div>
-
-            <div class="view" id="c_history">
-              <h2>Service History</h2>
-              <p>Review all your services including completed work and notes.</p>
-              <div class="panel">
-                <h3>Booking History</h3>
-                <div class="divider"></div>
-                <table class="table" id="historyTable"></table>
-              </div>
-            </div>
-
-            <!-- ADMIN VIEWS -->
-            <div class="view" id="a_home">
-              <h2>Admin Overview</h2>
-              <p>Manage customers, vehicles and service operations efficiently.</p>
-
-              <div class="banner-mini">
-                <img alt="Admin dashboard" src="https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1400&q=80">
-                <div class="text">
-                  <b>Admin Operations Center</b>
-                  <span>Update service status & manage customer ecosystem</span>
-                </div>
-              </div>
-
-              <div class="grid-2">
-                <div class="panel">
-                  <h3>Admin Actions</h3>
-                  <div class="divider"></div>
-                  <div class="inline">
-                    <button class="btn primary" onclick="openView('a_bookings')">View Bookings</button>
-                    <button class="btn" onclick="openView('a_customers')">Manage Customers</button>
-                    <button class="btn" onclick="openView('a_vehicles')">Manage Vehicles</button>
-                  </div>
-                </div>
-                <div class="panel">
-                  <h3>System Summary</h3>
-                  <div class="divider"></div>
-                  <div class="hint" id="adminSummary">Loading...</div>
-                </div>
-              </div>
-            </div>
-
-            <div class="view" id="a_bookings">
-              <h2>All Service Bookings</h2>
-              <p>Update status: Pending → In Progress → Completed.</p>
-
-              <div class="panel">
-                <h3>Bookings List</h3>
-                <div class="divider"></div>
-                <table class="table" id="adminBookingTable"></table>
-              </div>
-            </div>
-
-            <div class="view" id="a_customers">
-              <h2>Manage Customers</h2>
-              <p>View and manage registered customers.</p>
-              <div class="panel">
-                <h3>Customers</h3>
-                <div class="divider"></div>
-                <table class="table" id="customerTable"></table>
-              </div>
-            </div>
-
-            <div class="view" id="a_vehicles">
-              <h2>Manage Vehicles</h2>
-              <p>All vehicles registered across customers.</p>
-              <div class="panel">
-                <h3>All Vehicles</h3>
-                <div class="divider"></div>
-                <table class="table" id="allVehiclesTable"></table>
-              </div>
-            </div>
-
           </div>
         </div>
       </div>
+    `;
+  }
 
-      <div class="footer-note">
-        Built as a Single HTML File • Professional UI • Made for Sanjay PV
+  function pageLogin(){
+    return `
+      <div class="cards">
+        <div class="card">
+          <div class="hd"><h3>Login</h3><span class="tag">Customer / Admin</span></div>
+          <div class="bd">
+            <label>Email</label>
+            <input id="log_email" placeholder="Enter email" />
+            <div style="height:12px"></div>
+            <label>Password</label>
+            <input id="log_pass" type="password" placeholder="Enter password" />
+
+            <div class="form-actions">
+              <button class="btn primary" onclick="login()">Login</button>
+              <button class="btn" onclick="go('register')">Create Customer Account</button>
+            </div>
+
+            <p class="muted" style="margin-top:12px">
+              Tip: Click <b>Demo Data</b> to quickly try admin + customer panels.
+            </p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="hd"><h3>System Highlights</h3><span class="tag">Standard</span></div>
+          <div class="bd">
+            <ul class="muted" style="margin:0; padding-left:18px; line-height:1.8">
+              <li>Role-based Access (Customer/Admin)</li>
+              <li>Service Status Tracking</li>
+              <li>Service History & Table Layout</li>
+              <li>Professional dark-mode interface</li>
+              <li>Single-file software for GitHub Pages</li>
+            </ul>
+          </div>
+        </div>
       </div>
-    </div>
-
-  </div>
-
-  <div class="toast" id="toast"></div>
-
-  <script>
-    /***********************
-     * LocalStorage DB
-     ***********************/
-    const DBKEY = "VSMS_DB_v2_PRO";
-
-    function loadDB(){
-      const raw = localStorage.getItem(DBKEY);
-      if(!raw){
-        const init = { customers: [], vehicles: [], bookings: [] };
-        localStorage.setItem(DBKEY, JSON.stringify(init));
-        return init;
-      }
-      return JSON.parse(raw);
-    }
-    function saveDB(db){ localStorage.setItem(DBKEY, JSON.stringify(db)); }
-
-    // Session
-    const SESSION = { role: "guest", customerId: null, customerEmail: null };
-
-    /***********************
-     * Utils
-     ***********************/
-    function uid(prefix="ID"){
-      return prefix + "_" + Math.random().toString(16).slice(2) + "_" + Date.now();
-    }
-    function nowISO(){ return new Date().toISOString(); }
-
-    function toast(msg){
-      const t = document.getElementById("toast");
-      t.textContent = msg;
-      t.classList.add("show");
-      setTimeout(()=> t.classList.remove("show"), 2400);
-    }
-
-    function badge(status){
-      if(status==="Pending") return `<span class="badge b-pending">Pending</span>`;
-      if(status==="In Progress") return `<span class="badge b-progress">In Progress</span>`;
-      return `<span class="badge b-done">Completed</span>`;
-    }
-
-    function setModePill(){
-      const mode = document.getElementById("modePill");
-      const logoutBtn = document.getElementById("logoutBtn");
-      if(SESSION.role==="guest"){
-        mode.textContent = "Guest";
-        logoutBtn.style.display="none";
-      }else if(SESSION.role==="customer"){
-        mode.textContent = "Customer";
-        logoutBtn.style.display="inline-flex";
-      }else{
-        mode.textContent = "Admin";
-        logoutBtn.style.display="inline-flex";
-      }
-    }
-
-    /***********************
-     * Auth UI switching
-     ***********************/
-    function switchAuth(mode){
-      document.getElementById("tabCustomer").classList.remove("active");
-      document.getElementById("tabAdmin").classList.remove("active");
-      document.getElementById("customerAuth").style.display = "none";
-      document.getElementById("adminAuth").style.display = "none";
-
-      if(mode==="customer"){
-        document.getElementById("tabCustomer").classList.add("active");
-        document.getElementById("customerAuth").style.display = "block";
-      }else{
-        document.getElementById("tabAdmin").classList.add("active");
-        document.getElementById("adminAuth").style.display = "block";
-      }
-    }
-
-    function openAbout(){
-      alert(
-`Vehicle Service Management System (Professional UI)
-✅ Customer: Register/Login, Add Vehicle, Book Service, Status/History
-✅ Admin: Login, View Bookings, Update Status, Manage Customers/Vehicles
-✅ Single HTML + LocalStorage (No backend)`
-      );
-    }
-
-    /***********************
-     * Register / Login (Improved)
-     ***********************/
-    function openRegister(){
-      const name = prompt("Enter your full name:");
-      if(!name || name.trim().length < 2){
-        toast("Please enter a valid name.");
-        return;
-      }
-
-      const email = (document.getElementById("cEmail").value || "").trim().toLowerCase();
-      const pass = (document.getElementById("cPass").value || "").trim();
-
-      if(!email || !email.includes("@")){
-        toast("Enter a valid email in the login box first.");
-        return;
-      }
-      if(pass.length < 4){
-        toast("Password must be at least 4 characters.");
-        return;
-      }
-
-      const db = loadDB();
-      if(db.customers.some(c => c.email === email)){
-        toast("Email already registered. Please login.");
-        return;
-      }
-
-      const customer = { id: uid("CUS"), name: name.trim(), email, pass, createdAt: nowISO() };
-      db.customers.push(customer);
-      saveDB(db);
-
-      toast("Registration successful ✅ Now login.");
-    }
-
-    function customerLogin(){
-      const email = (document.getElementById("cEmail").value || "").trim().toLowerCase();
-      const pass = (document.getElementById("cPass").value || "").trim();
-
-      const db = loadDB();
-      const user = db.customers.find(c => c.email === email && c.pass === pass);
-      if(!user){
-        toast("Invalid customer login ❌");
-        return;
-      }
-
-      SESSION.role="customer";
-      SESSION.customerId=user.id;
-      SESSION.customerEmail=user.email;
-
-      openDashboard();
-      toast("Welcome, " + user.name + " ✅");
-    }
-
-    function adminLogin(){
-      const u = (document.getElementById("aUser").value || "").trim();
-      const p = (document.getElementById("aPass").value || "").trim();
-
-      if(u==="admin" && p==="admin123"){
-        SESSION.role="admin";
-        SESSION.customerId=null;
-        SESSION.customerEmail=null;
-        openDashboard();
-        toast("Admin logged in ✅");
-      }else{
-        toast("Invalid admin login ❌");
-      }
-    }
-
-    function logout(){
-      SESSION.role="guest";
-      SESSION.customerId=null;
-      SESSION.customerEmail=null;
-
-      document.getElementById("dashArea").style.display="none";
-      document.getElementById("authArea").style.display="block";
-      setModePill();
-      toast("Logged out.");
-    }
-
-    /***********************
-     * Dashboard
-     ***********************/
-    function openDashboard(){
-      document.getElementById("authArea").style.display="none";
-      document.getElementById("dashArea").style.display="block";
-
-      setModePill();
-
-      document.getElementById("menuCustomer").style.display = (SESSION.role==="customer") ? "flex" : "none";
-      document.getElementById("menuAdmin").style.display = (SESSION.role==="admin") ? "flex" : "none";
-
-      document.getElementById("loggedRole").textContent = SESSION.role.toUpperCase();
-
-      if(SESSION.role==="customer"){
-        const db = loadDB();
-        const user = db.customers.find(c=>c.id===SESSION.customerId);
-        document.getElementById("loggedUser").textContent = user ? user.name : "Customer";
-        openView("c_home");
-        refreshCustomerAll();
-      }else{
-        document.getElementById("loggedUser").textContent = "ADMIN";
-        openView("a_home");
-        refreshAdminAll();
-      }
-    }
-
-    function openView(id, btn=null){
-      document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
-      const target = document.getElementById(id);
-      if(target) target.classList.add("active");
-
-      document.querySelectorAll(".menu button").forEach(b => b.classList.remove("active"));
-      if(btn) btn.classList.add("active");
-
-      if(id==="c_vehicle") refreshVehicleTable();
-      if(id==="c_book") refreshBookingForm();
-      if(id==="c_status") refreshStatus();
-      if(id==="c_history") refreshHistory();
-
-      if(id==="a_bookings") refreshAdminBookings();
-      if(id==="a_customers") refreshAdminCustomers();
-      if(id==="a_vehicles") refreshAdminVehicles();
-
-      if(id==="c_home") refreshCustomerSummary();
-      if(id==="a_home") refreshAdminSummary();
-    }
-
-    /***********************
-     * Customer Operations
-     ***********************/
-    function addVehicle(){
-      const type = document.getElementById("vType").value;
-      const brand = document.getElementById("vBrand").value.trim();
-      const model = document.getElementById("vModel").value.trim();
-      const reg = document.getElementById("vReg").value.trim().toUpperCase();
-
-      if(!brand || !model || !reg){
-        toast("Fill all vehicle fields.");
-        return;
-      }
-
-      const db = loadDB();
-      if(db.vehicles.some(v => v.customerId===SESSION.customerId && v.reg===reg)){
-        toast("This registration already exists.");
-        return;
-      }
-
-      db.vehicles.push({
-        id: uid("VEH"),
-        customerId: SESSION.customerId,
-        type, brand, model, reg,
-        createdAt: nowISO()
-      });
-      saveDB(db);
-
-      document.getElementById("vBrand").value="";
-      document.getElementById("vModel").value="";
-      document.getElementById("vReg").value="";
-
-      toast("Vehicle added ✅");
-      refreshCustomerAll();
-    }
-
-    function refreshVehicleTable(){
-      const db = loadDB();
-      const myVehicles = db.vehicles.filter(v => v.customerId===SESSION.customerId);
-
-      const table = document.getElementById("vehicleTable");
-      if(!myVehicles.length){
-        table.innerHTML = `<tr><td class="hint">No vehicles added yet.</td></tr>`;
-        return;
-      }
-
-      table.innerHTML = `
-        <tr>
-          <th>Type</th><th>Brand</th><th>Model</th><th>Reg No</th><th>Action</th>
-        </tr>
-        ${myVehicles.map(v=>`
-          <tr class="row">
-            <td>${v.type}</td>
-            <td>${v.brand}</td>
-            <td>${v.model}</td>
-            <td>${v.reg}</td>
-            <td><button class="btn mini danger" onclick="deleteVehicle('${v.id}')">Delete</button></td>
-          </tr>
-        `).join("")}
-      `;
-    }
-
-    function deleteVehicle(vehicleId){
-      if(!confirm("Delete this vehicle? Related bookings will be removed.")) return;
-      const db = loadDB();
-
-      db.bookings = db.bookings.filter(b => b.vehicleId !== vehicleId);
-      db.vehicles = db.vehicles.filter(v => v.id !== vehicleId);
-
-      saveDB(db);
-      toast("Vehicle deleted ✅");
-      refreshCustomerAll();
-    }
-
-    function refreshBookingForm(){
-      const db = loadDB();
-      const myVehicles = db.vehicles.filter(v => v.customerId===SESSION.customerId);
-      const sel = document.getElementById("bookVehicle");
-
-      if(!myVehicles.length){
-        sel.innerHTML = `<option value="">-- Add a vehicle first --</option>`;
-      }else{
-        sel.innerHTML = myVehicles.map(v => `<option value="${v.id}">${v.reg} • ${v.brand} ${v.model}</option>`).join("");
-      }
-
-      const d = new Date();
-      const iso = d.toISOString().slice(0,10);
-      document.getElementById("bookDate").min = iso;
-      if(!document.getElementById("bookDate").value) document.getElementById("bookDate").value = iso;
-    }
-
-    function bookService(){
-      const vehicleId = document.getElementById("bookVehicle").value;
-      const serviceType = document.getElementById("bookType").value;
-      const date = document.getElementById("bookDate").value;
-      const pickup = document.getElementById("bookPickup").value;
-      const note = document.getElementById("bookNote").value.trim();
-
-      if(!vehicleId){
-        toast("Please select a vehicle.");
-        return;
-      }
-      if(!date){
-        toast("Please select a date.");
-        return;
-      }
-
-      const db = loadDB();
-      db.bookings.push({
-        id: uid("BKG"),
-        customerId: SESSION.customerId,
-        vehicleId,
-        serviceType,
-        date,
-        pickup,
-        note,
-        status: "Pending",
-        createdAt: nowISO(),
-        updatedAt: nowISO()
-      });
-      saveDB(db);
-
-      document.getElementById("bookNote").value="";
-      toast("Booking confirmed ✅");
-      refreshCustomerAll();
-      openView("c_status");
-    }
-
-    function refreshStatus(){
-      const db = loadDB();
-      const myBookings = db.bookings
-        .filter(b => b.customerId===SESSION.customerId)
-        .sort((a,b)=> (b.createdAt||"").localeCompare(a.createdAt||""));
-
-      const active = myBookings.filter(b => b.status !== "Completed");
-      const table = document.getElementById("statusTable");
-
-      if(!active.length){
-        table.innerHTML = `<tr><td class="hint">No active services.</td></tr>`;
-        return;
-      }
-
-      table.innerHTML = `
-        <tr><th>Vehicle</th><th>Service</th><th>Date</th><th>Status</th></tr>
-        ${active.map(b=>{
-          const v = db.vehicles.find(x=>x.id===b.vehicleId);
-          const label = v ? `${v.reg} • ${v.brand} ${v.model}` : "Vehicle Deleted";
-          return `
-            <tr class="row">
-              <td>${label}</td>
-              <td>${b.serviceType}</td>
-              <td>${b.date}</td>
-              <td>${badge(b.status)}</td>
-            </tr>
-          `;
-        }).join("")}
-      `;
-    }
-
-    function refreshHistory(){
-      const db = loadDB();
-      const myBookings = db.bookings
-        .filter(b => b.customerId===SESSION.customerId)
-        .sort((a,b)=> (b.createdAt||"").localeCompare(a.createdAt||""));
-
-      const table = document.getElementById("historyTable");
-      if(!myBookings.length){
-        table.innerHTML = `<tr><td class="hint">No service history found.</td></tr>`;
-        return;
-      }
-
-      table.innerHTML = `
-        <tr><th>Vehicle</th><th>Service</th><th>Date</th><th>Status</th><th>Notes</th></tr>
-        ${myBookings.map(b=>{
-          const v = db.vehicles.find(x=>x.id===b.vehicleId);
-          const label = v ? `${v.reg}` : "Vehicle Deleted";
-          return `
-            <tr class="row">
-              <td>${label}</td>
-              <td>${b.serviceType}</td>
-              <td>${b.date}</td>
-              <td>${badge(b.status)}</td>
-              <td>${(b.note||"-").slice(0,70)}</td>
-            </tr>
-          `;
-        }).join("")}
-      `;
-    }
-
-    function refreshCustomerSummary(){
-      const db = loadDB();
-      const myVehicles = db.vehicles.filter(v => v.customerId===SESSION.customerId);
-      const myBookings = db.bookings.filter(b => b.customerId===SESSION.customerId);
-      const pending = myBookings.filter(b => b.status==="Pending").length;
-      const progress = myBookings.filter(b => b.status==="In Progress").length;
-      const done = myBookings.filter(b => b.status==="Completed").length;
-
-      document.getElementById("customerSummary").innerHTML = `
-        <b>Vehicles:</b> ${myVehicles.length}<br/>
-        <b>Total Bookings:</b> ${myBookings.length}<br/>
-        <b class="danger-text">Pending:</b> ${pending}<br/>
-        <b>In Progress:</b> ${progress}<br/>
-        <b style="color: var(--ok)">Completed:</b> ${done}
-      `;
-    }
-
-    function refreshCustomerAll(){
-      refreshCustomerSummary();
-      refreshVehicleTable();
-      refreshBookingForm();
-      refreshStatus();
-      refreshHistory();
-    }
-
-    /***********************
-     * Admin Operations
-     ***********************/
-    function refreshAdminBookings(){
-      const db = loadDB();
-      const all = [...db.bookings].sort((a,b)=> (b.createdAt||"").localeCompare(a.createdAt||""));
-      const table = document.getElementById("adminBookingTable");
-
-      if(!all.length){
-        table.innerHTML = `<tr><td class="hint">No bookings yet.</td></tr>`;
-        return;
-      }
-
-      table.innerHTML = `
-        <tr><th>Customer</th><th>Vehicle</th><th>Service</th><th>Date</th><th>Status</th><th>Update</th></tr>
-        ${all.map(b=>{
-          const c = db.customers.find(x=>x.id===b.customerId);
-          const v = db.vehicles.find(x=>x.id===b.vehicleId);
-          const cust = c ? `${c.name} (${c.email})` : "Deleted Customer";
-          const veh = v ? `${v.reg} • ${v.brand} ${v.model}` : "Vehicle Deleted";
-          return `
-            <tr class="row">
-              <td>${cust}</td>
-              <td>${veh}</td>
-              <td>${b.serviceType}</td>
-              <td>${b.date}</td>
-              <td>${badge(b.status)}</td>
-              <td>
-                <select onchange="adminUpdateStatus('${b.id}', this.value)">
-                  <option ${b.status==="Pending"?"selected":""}>Pending</option>
-                  <option ${b.status==="In Progress"?"selected":""}>In Progress</option>
-                  <option ${b.status==="Completed"?"selected":""}>Completed</option>
+    `;
+  }
+
+  function pageCustomerDashboard(){
+    const sess = getSession();
+    const vehicles = getData(LS.vehicles, []).filter(v=>v.userId===sess.id);
+    const bookings = getData(LS.bookings, []).filter(b=>b.userId===sess.id);
+
+    const pending = bookings.filter(b=>b.status!=="Completed").length;
+    const completed = bookings.filter(b=>b.status==="Completed").length;
+
+    return `
+      <div class="cards">
+        <div class="card">
+          <div class="hd"><h3>Quick Overview</h3><span class="tag">Customer</span></div>
+          <div class="bd">
+            <p class="muted"><b>${vehicles.length}</b> vehicles registered</p>
+            <p class="muted"><b>${pending}</b> active bookings</p>
+            <p class="muted"><b>${completed}</b> completed services</p>
+            <div class="form-actions">
+              <button class="btn primary" onclick="go('book_service')">Book Service</button>
+              <button class="btn" onclick="go('add_vehicle')">Add Vehicle</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="hd"><h3>Recent Bookings</h3><span class="tag">Live Status</span></div>
+          <div class="bd">
+            ${renderBookingsTable(bookings.slice().reverse().slice(0,4), true)}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function pageAddVehicle(){
+    return `
+      <div class="cards">
+        <div class="card" style="grid-column:1/-1">
+          <div class="hd"><h3>Add Vehicle Details</h3><span class="tag">Customer Module</span></div>
+          <div class="bd">
+            <div class="row">
+              <div>
+                <label>Vehicle Number</label>
+                <input id="veh_no" placeholder="Eg: KL-13-AB-2026" />
+              </div>
+              <div>
+                <label>Vehicle Type</label>
+                <select id="veh_type">
+                  <option>Car</option>
+                  <option>Bike</option>
+                  <option>SUV</option>
+                  <option>Van</option>
+                  <option>Truck</option>
                 </select>
-              </td>
-            </tr>
-          `;
-        }).join("")}
+              </div>
+            </div>
+
+            <div class="row" style="margin-top:12px">
+              <div>
+                <label>Vehicle Model</label>
+                <input id="veh_model" placeholder="Eg: Honda City / i20 / Pulsar" />
+              </div>
+              <div>
+                <label>Owner Name</label>
+                <input id="veh_owner" placeholder="Owner full name" />
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button class="btn primary" onclick="addVehicle()">Save Vehicle</button>
+              <button class="btn" onclick="go('customer_dashboard')">Back to Dashboard</button>
+            </div>
+
+            <div style="height:14px"></div>
+            <div class="card" style="background:rgba(255,255,255,0.03)">
+              <div class="hd"><h3>Your Vehicles</h3><span class="tag">List</span></div>
+              <div class="bd" id="vehicleList"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function pageBookService(){
+    const sess = getSession();
+    const vehicles = getData(LS.vehicles, []).filter(v=>v.userId===sess.id);
+
+    let vehicleOptions = vehicles.map(v => `<option value="${v.id}">${v.vehicleNo} • ${v.model} (${v.type})</option>`).join("");
+    if(!vehicleOptions) vehicleOptions = `<option value="">No vehicle found</option>`;
+
+    return `
+      <div class="cards">
+        <div class="card" style="grid-column:1/-1">
+          <div class="hd"><h3>Book Vehicle Service</h3><span class="tag">Booking Module</span></div>
+          <div class="bd">
+            <div class="row">
+              <div>
+                <label>Select Vehicle</label>
+                <select id="bk_vehicle">${vehicleOptions}</select>
+                <p class="muted" style="margin:8px 0 0; font-size:11px">
+                  Add vehicle first if not available.
+                </p>
+              </div>
+              <div>
+                <label>Preferred Date</label>
+                <input id="bk_date" type="date" />
+              </div>
+            </div>
+
+            <div class="row" style="margin-top:12px">
+              <div>
+                <label>Service Type</label>
+                <select id="bk_type">
+                  <option>General Service</option>
+                  <option>Full Service</option>
+                  <option>Engine Check</option>
+                  <option>Oil Change</option>
+                  <option>Brake Service</option>
+                  <option>AC Service</option>
+                </select>
+              </div>
+              <div>
+                <label>Notes</label>
+                <textarea id="bk_notes" placeholder="Any special instruction..."></textarea>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button class="btn primary" onclick="bookService()">Confirm Booking</button>
+              <button class="btn" onclick="go('service_status')">View Status</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function pageServiceStatus(){
+    const sess = getSession();
+    const bookings = getData(LS.bookings, []).filter(b=>b.userId===sess.id);
+    const active = bookings.filter(b=>b.status!=="Completed").slice().reverse();
+
+    return `
+      <div class="cards">
+        <div class="card" style="grid-column:1/-1">
+          <div class="hd"><h3>Active Bookings</h3><span class="tag">Status Live</span></div>
+          <div class="bd">
+            ${renderBookingsTable(active, true)}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function pageServiceHistory(){
+    const sess = getSession();
+    const bookings = getData(LS.bookings, []).filter(b=>b.userId===sess.id).slice().reverse();
+    return `
+      <div class="cards">
+        <div class="card" style="grid-column:1/-1">
+          <div class="hd"><h3>Service History</h3><span class="tag">All Records</span></div>
+          <div class="bd">
+            ${renderBookingsTable(bookings, true)}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function pageAdminDashboard(){
+    const bookings = getData(LS.bookings, []).slice().reverse();
+    const users = getData(LS.users, []);
+    const vehicles = getData(LS.vehicles, []);
+
+    function getUserName(id){
+      return users.find(u=>u.id===id)?.name ?? "Unknown";
+    }
+    function getVehicle(id){
+      return vehicles.find(v=>v.id===id);
+    }
+
+    let rows = bookings.map(b=>{
+      const veh = getVehicle(b.vehicleId);
+      const customer = getUserName(b.userId);
+      return `
+        <tr>
+          <td><b>${b.id}</b><br><span class="muted">${b.createdAt}</span></td>
+          <td>${customer}<br><span class="muted">${veh ? (veh.vehicleNo + " • " + veh.model) : "N/A"}</span></td>
+          <td>${b.serviceType}<br><span class="muted">Preferred: ${b.preferredDate || "-"}</span></td>
+          <td>${statusBadge(b.status)}</td>
+          <td>
+            <select onchange="updateStatus('${b.id}', this.value)">
+              <option ${b.status==="Pending"?"selected":""}>Pending</option>
+              <option ${b.status==="In Progress"?"selected":""}>In Progress</option>
+              <option ${b.status==="Completed"?"selected":""}>Completed</option>
+            </select>
+            <div style="margin-top:8px" class="muted">Updated: ${b.updatedAt}</div>
+          </td>
+        </tr>
       `;
+    }).join("");
+
+    if(!rows){
+      rows = `<tr><td colspan="5" class="muted">No service bookings found.</td></tr>`;
     }
 
-    function adminUpdateStatus(bookingId, status){
-      const db = loadDB();
-      const b = db.bookings.find(x=>x.id===bookingId);
-      if(!b) return;
+    return `
+      <div class="cards">
+        <div class="card" style="grid-column:1/-1">
+          <div class="hd"><h3>All Service Bookings</h3><span class="tag">Admin Control</span></div>
+          <div class="bd">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Booking</th>
+                  <th>Customer & Vehicle</th>
+                  <th>Service</th>
+                  <th>Status</th>
+                  <th>Update</th>
+                </tr>
+              </thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    `;
+  }
 
-      b.status = status;
-      b.updatedAt = nowISO();
-      saveDB(db);
-
-      toast("Status updated ✅");
-      refreshAdminAll();
+  /***************
+   * Rendering Helpers
+   ***************/
+  function renderBookingsTable(bookings, includeVehicle){
+    const vehicles = getData(LS.vehicles, []);
+    function getVehicle(id){
+      return vehicles.find(v=>v.id===id);
     }
 
-    function refreshAdminCustomers(){
-      const db = loadDB();
-      const table = document.getElementById("customerTable");
+    if(!bookings || bookings.length===0){
+      return `<div class="muted">No bookings available.</div>`;
+    }
 
-      if(!db.customers.length){
-        table.innerHTML = `<tr><td class="hint">No customers registered.</td></tr>`;
-        return;
-      }
+    let rows = bookings.map(b=>{
+      const veh = getVehicle(b.vehicleId);
+      return `
+        <tr>
+          <td><b>${b.id}</b><br><span class="muted">${b.createdAt}</span></td>
+          <td>${veh ? `${veh.vehicleNo} • ${veh.model}` : "N/A"}<br>
+              <span class="muted">${veh ? veh.type : ""}</span>
+          </td>
+          <td>${b.serviceType}<br><span class="muted">Preferred: ${b.preferredDate || "-"}</span></td>
+          <td>${statusBadge(b.status)}<br><span class="muted">Updated: ${b.updatedAt}</span></td>
+        </tr>
+      `;
+    }).join("");
 
-      table.innerHTML = `
-        <tr><th>Name</th><th>Email</th><th>Created</th><th>Action</th></tr>
-        ${db.customers.map(c=>`
-          <tr class="row">
-            <td>${c.name}</td>
-            <td>${c.email}</td>
-            <td>${(c.createdAt||"").slice(0,10)}</td>
-            <td><button class="btn mini danger" onclick="adminDeleteCustomer('${c.id}')">Remove</button></td>
+    return `
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Booking</th>
+            <th>Vehicle</th>
+            <th>Service</th>
+            <th>Status</th>
           </tr>
-        `).join("")}
-      `;
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    `;
+  }
+
+  /***************
+   * Actions
+   ***************/
+  function registerCustomer(){
+    const name = document.getElementById("reg_name").value.trim();
+    const email = document.getElementById("reg_email").value.trim().toLowerCase();
+    const pass = document.getElementById("reg_pass").value;
+    const pass2 = document.getElementById("reg_pass2").value;
+
+    if(!name || !email || !pass) return toast("bad","Error","Fill all fields.");
+    if(pass !== pass2) return toast("bad","Password mismatch","Confirm password correctly.");
+
+    const users = getData(LS.users, []);
+    if(users.find(u=>u.email===email)){
+      return toast("warn","Already Registered","Email already exists.");
     }
 
-    function adminDeleteCustomer(customerId){
-      if(!confirm("Remove customer? All vehicles & bookings will be removed.")) return;
+    const u = { id: uid("USR"), name, email, password: pass, role:"customer", createdAt: nowStr() };
+    users.push(u);
+    setData(LS.users, users);
 
-      const db = loadDB();
-      db.bookings = db.bookings.filter(b=>b.customerId !== customerId);
-      db.vehicles = db.vehicles.filter(v=>v.customerId !== customerId);
-      db.customers = db.customers.filter(c=>c.id !== customerId);
-      saveDB(db);
+    toast("ok","Registered","Customer account created successfully.");
+    go("login");
+  }
 
-      toast("Customer removed ✅");
-      refreshAdminAll();
+  function login(){
+    const email = document.getElementById("log_email").value.trim().toLowerCase();
+    const pass = document.getElementById("log_pass").value;
+
+    const users = getData(LS.users, []);
+    const u = users.find(x => x.email===email && x.password===pass);
+    if(!u) return toast("bad","Login failed","Invalid email or password.");
+
+    setSession({id:u.id, name:u.name, email:u.email, role:u.role});
+    toast("ok","Login success", `Welcome ${u.name}`);
+    go(u.role==="admin" ? "admin_dashboard" : "customer_dashboard");
+  }
+
+  function addVehicle(){
+    const sess = getSession();
+    if(!sess) return;
+
+    const vehicleNo = document.getElementById("veh_no").value.trim().toUpperCase();
+    const type = document.getElementById("veh_type").value;
+    const model = document.getElementById("veh_model").value.trim();
+    const ownerName = document.getElementById("veh_owner").value.trim() || sess.name;
+
+    if(!vehicleNo || !model) return toast("bad","Error","Vehicle number & model are required.");
+
+    const vehicles = getData(LS.vehicles, []);
+    if(vehicles.find(v => v.vehicleNo===vehicleNo)){
+      return toast("warn","Already Exists","This vehicle number is already registered.");
     }
 
-    function refreshAdminVehicles(){
-      const db = loadDB();
-      const table = document.getElementById("allVehiclesTable");
-
-      if(!db.vehicles.length){
-        table.innerHTML = `<tr><td class="hint">No vehicles registered.</td></tr>`;
-        return;
-      }
-
-      table.innerHTML = `
-        <tr><th>Owner</th><th>Type</th><th>Brand</th><th>Model</th><th>Reg</th><th>Action</th></tr>
-        ${db.vehicles.map(v=>{
-          const c = db.customers.find(x=>x.id===v.customerId);
-          const owner = c ? `${c.name} (${c.email})` : "Deleted Customer";
-          return `
-            <tr class="row">
-              <td>${owner}</td>
-              <td>${v.type}</td>
-              <td>${v.brand}</td>
-              <td>${v.model}</td>
-              <td>${v.reg}</td>
-              <td><button class="btn mini danger" onclick="adminDeleteVehicle('${v.id}')">Remove</button></td>
-            </tr>
-          `;
-        }).join("")}
-      `;
-    }
-
-    function adminDeleteVehicle(vehicleId){
-      if(!confirm("Remove vehicle? Related bookings will also be removed.")) return;
-
-      const db = loadDB();
-      db.bookings = db.bookings.filter(b=>b.vehicleId !== vehicleId);
-      db.vehicles = db.vehicles.filter(v=>v.id !== vehicleId);
-      saveDB(db);
-
-      toast("Vehicle removed ✅");
-      refreshAdminAll();
-    }
-
-    function refreshAdminSummary(){
-      const db = loadDB();
-      const pending = db.bookings.filter(b=>b.status==="Pending").length;
-      const progress = db.bookings.filter(b=>b.status==="In Progress").length;
-      const done = db.bookings.filter(b=>b.status==="Completed").length;
-
-      document.getElementById("adminSummary").innerHTML = `
-        <b>Customers:</b> ${db.customers.length}<br/>
-        <b>Vehicles:</b> ${db.vehicles.length}<br/>
-        <b>Total Bookings:</b> ${db.bookings.length}<br/>
-        <b class="danger-text">Pending:</b> ${pending}<br/>
-        <b>In Progress:</b> ${progress}<br/>
-        <b style="color: var(--ok)">Completed:</b> ${done}
-      `;
-    }
-
-    function refreshAdminAll(){
-      refreshAdminSummary();
-      refreshAdminBookings();
-      refreshAdminCustomers();
-      refreshAdminVehicles();
-    }
-
-    /***********************
-     * Reset Demo
-     ***********************/
-    function resetDemo(){
-      if(!confirm("Reset all stored data? This clears customers, vehicles & bookings.")) return;
-      localStorage.removeItem(DBKEY);
-      toast("Data reset ✅ Reloading...");
-      setTimeout(()=> location.reload(), 650);
-    }
-
-    // On load
-    window.addEventListener("load", ()=>{
-      setModePill();
-      loadDB();
+    vehicles.push({
+      id: uid("VEH"),
+      userId: sess.id,
+      ownerName,
+      vehicleNo, model, type,
+      createdAt: nowStr()
     });
-  </script>
+
+    setData(LS.vehicles, vehicles);
+    toast("ok","Saved","Vehicle added successfully.");
+    renderVehiclesList();
+  }
+
+  function renderVehiclesList(){
+    const sess = getSession();
+    const listDiv = document.getElementById("vehicleList");
+    if(!listDiv) return;
+
+    const vehicles = getData(LS.vehicles, []).filter(v=>v.userId===sess.id).slice().reverse();
+    if(vehicles.length===0){
+      listDiv.innerHTML = `<div class="muted">No vehicles found. Add one above.</div>`;
+      return;
+    }
+
+    listDiv.innerHTML = `
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Vehicle No</th>
+            <th>Model</th>
+            <th>Type</th>
+            <th>Added</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${vehicles.map(v=>`
+            <tr>
+              <td><b>${v.vehicleNo}</b></td>
+              <td>${v.model}</td>
+              <td>${v.type}</td>
+              <td><span class="muted">${v.createdAt}</span></td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    `;
+  }
+
+  function bookService(){
+    const sess = getSession();
+    const vehicleId = document.getElementById("bk_vehicle").value;
+    const preferredDate = document.getElementById("bk_date").value;
+    const serviceType = document.getElementById("bk_type").value;
+    const notes = document.getElementById("bk_notes").value.trim();
+
+    if(!vehicleId) return toast("bad","Error","Please add/select a vehicle first.");
+    if(!preferredDate) return toast("warn","Missing date","Choose preferred service date.");
+
+    const bookings = getData(LS.bookings, []);
+    bookings.push({
+      id: uid("BK"),
+      userId: sess.id,
+      vehicleId,
+      serviceType,
+      preferredDate,
+      notes,
+      status: "Pending",
+      createdAt: nowStr(),
+      updatedAt: nowStr()
+    });
+
+    setData(LS.bookings, bookings);
+    toast("ok","Booked","Service booking created successfully.");
+    go("service_status");
+  }
+
+  function updateStatus(bookingId, newStatus){
+    const sess = getSession();
+    if(!sess || sess.role!=="admin") return toast("bad","Denied","Admin only.");
+
+    const bookings = getData(LS.bookings, []);
+    const b = bookings.find(x=>x.id===bookingId);
+    if(!b) return toast("bad","Error","Booking not found.");
+
+    b.status = newStatus;
+    b.updatedAt = nowStr();
+
+    setData(LS.bookings, bookings);
+    toast("ok","Updated",`Booking ${bookingId} is now "${newStatus}".`);
+    render();
+  }
+
+  /***************
+   * Render App
+   ***************/
+  function render(){
+    renderNav();
+
+    const sess = getSession();
+    let page = window.__page || "welcome";
+
+    // redirect logic
+    if(!sess && !["welcome","register","login"].includes(page)) page = "login";
+    if(sess && sess.role==="customer" && page==="admin_dashboard") page = "customer_dashboard";
+    if(sess && sess.role==="admin" && ["customer_dashboard","add_vehicle","book_service","service_status","service_history"].includes(page)) page = "admin_dashboard";
+
+    setHeader(page);
+    setActiveNav(page);
+
+    const content = document.getElementById("pageContent");
+
+    switch(page){
+      case "welcome": content.innerHTML = pageWelcome(); break;
+      case "register": content.innerHTML = pageRegister(); break;
+      case "login": content.innerHTML = pageLogin(); break;
+
+      case "customer_dashboard": content.innerHTML = pageCustomerDashboard(); break;
+      case "add_vehicle": content.innerHTML = pageAddVehicle(); setTimeout(renderVehiclesList, 50); break;
+      case "book_service": content.innerHTML = pageBookService(); break;
+      case "service_status": content.innerHTML = pageServiceStatus(); break;
+      case "service_history": content.innerHTML = pageServiceHistory(); break;
+
+      case "admin_dashboard": content.innerHTML = pageAdminDashboard(); break;
+      default: content.innerHTML = pageWelcome();
+    }
+
+    // update role hint UI
+    const sessionPill = document.getElementById("sessionPill");
+    if(sess) sessionPill.textContent = `${sess.role.toUpperCase()} • ${sess.name}`;
+  }
+
+  // first load
+  render();
+</script>
 </body>
 </html>
