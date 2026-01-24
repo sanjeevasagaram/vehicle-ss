@@ -1,1192 +1,502 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>Vehicle Service Management System</title>
-
-  <style>
-    :root{
-      --bg1:#070A12;
-      --bg2:#0B1020;
-      --card: rgba(255,255,255,0.06);
-      --card2: rgba(255,255,255,0.09);
-      --border: rgba(255,255,255,0.10);
-      --txt:#EAF0FF;
-      --muted: rgba(234,240,255,0.72);
-      --accent:#6D5BFF;
-      --accent2:#00E5FF;
-      --good:#22C55E;
-      --warn:#FBBF24;
-      --bad:#FF4D6D;
-      --shadow: 0 22px 60px rgba(0,0,0,0.55);
-      --radius: 18px;
-      --radius2: 26px;
-      --blur: blur(10px);
-    }
-
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      color:var(--txt);
-      min-height:100vh;
-      background:
-        radial-gradient(1200px 600px at 18% 10%, rgba(109,91,255,0.20), transparent 55%),
-        radial-gradient(900px 600px at 80% 20%, rgba(0,229,255,0.12), transparent 55%),
-        radial-gradient(700px 500px at 30% 90%, rgba(34,197,94,0.10), transparent 55%),
-        linear-gradient(180deg, var(--bg1), var(--bg2));
-    }
-
-    /* Top Bar */
-    .topbar{
-      position:sticky;
-      top:0;
-      z-index:50;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:14px;
-      padding:16px 22px;
-      backdrop-filter: var(--blur);
-      background: rgba(10,14,26,0.70);
-      border-bottom:1px solid var(--border);
-    }
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-    }
-    .logo{
-      width:44px;height:44px;border-radius:14px;
-      background:
-        radial-gradient(15px 15px at 35% 35%, rgba(255,255,255,0.65), transparent 60%),
-        linear-gradient(135deg, var(--accent), var(--accent2));
-      box-shadow: 0 12px 28px rgba(109,91,255,0.28);
-      display:grid;place-items:center;
-      font-weight:900;
-      letter-spacing:0.5px;
-    }
-    .brand h1{
-      margin:0;
-      font-size:15px;
-      letter-spacing:0.5px;
-      font-weight:800;
-    }
-    .brand p{
-      margin:0;
-      font-size:12px;
-      color:var(--muted);
-    }
-
-    .top-actions{
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-    .pill{
-      padding:9px 12px;
-      font-size:12px;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,0.05);
-      border-radius:999px;
-      color:var(--muted);
-    }
-    .btn{
-      cursor:pointer;
-      border:none;
-      border-radius:12px;
-      padding:10px 12px;
-      font-weight:700;
-      color:var(--txt);
-      background: rgba(255,255,255,0.08);
-      border:1px solid var(--border);
-      transition: 0.2s ease;
-    }
-    .btn:hover{transform:translateY(-1px); background: rgba(255,255,255,0.10)}
-    .btn.primary{
-      border:none;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      box-shadow: 0 18px 45px rgba(0,229,255,0.10);
-    }
-    .btn.danger{
-      background: rgba(255,77,109,0.12);
-      border:1px solid rgba(255,77,109,0.25);
-    }
-
-    /* Layout */
-    .container{
-      max-width:1200px;
-      margin:0 auto;
-      padding:22px;
-    }
-    .grid{
-      display:grid;
-      grid-template-columns: 330px 1fr;
-      gap:18px;
-    }
-    @media (max-width:980px){
-      .grid{grid-template-columns:1fr}
-    }
-
-    /* Sidebar */
-    .side{
-      border:1px solid var(--border);
-      border-radius: var(--radius2);
-      background: rgba(255,255,255,0.03);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    .side header{
-      padding:18px 18px 12px;
-      border-bottom:1px solid var(--border);
-      background: rgba(255,255,255,0.04);
-    }
-    .side header h2{
-      margin:0;
-      font-size:15px;
-      font-weight:900;
-      letter-spacing:0.4px;
-    }
-    .side header span{
-      display:inline-block;
-      margin-top:8px;
-      font-size:12px;
-      color:var(--muted);
-    }
-    .nav{
-      padding:14px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-    .nav button{
-      width:100%;
-      display:flex;
-      gap:10px;
-      align-items:center;
-      justify-content:flex-start;
-      padding:12px 12px;
-      border-radius:14px;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,0.04);
-      color:var(--txt);
-      cursor:pointer;
-      font-weight:800;
-      transition: 0.2s;
-    }
-    .nav button:hover{ background: rgba(255,255,255,0.06); transform:translateY(-1px)}
-    .nav button.active{
-      border:none;
-      background: linear-gradient(135deg, rgba(109,91,255,0.30), rgba(0,229,255,0.18));
-      box-shadow: 0 16px 35px rgba(109,91,255,0.12);
-    }
-    .icon{
-      width:34px;height:34px;
-      border-radius:12px;
-      display:grid;place-items:center;
-      background: rgba(255,255,255,0.06);
-      border:1px solid var(--border);
-      font-size:16px;
-    }
-
-    /* Main Panel */
-    .main{
-      border:1px solid var(--border);
-      border-radius: var(--radius2);
-      background: rgba(255,255,255,0.03);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    .main header{
-      padding:18px;
-      border-bottom:1px solid var(--border);
-      background: rgba(255,255,255,0.04);
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:18px;
-    }
-    .main header h2{
-      margin:0;
-      font-size:16px;
-      font-weight:900;
-      letter-spacing:0.35px;
-    }
-    .main header p{
-      margin:8px 0 0;
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.55;
-      max-width:680px;
-    }
-
-    /* Cards */
-    .content{
-      padding:18px;
-    }
-    .cards{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:14px;
-    }
-    @media (max-width:980px){
-      .cards{grid-template-columns:1fr}
-    }
-    .card{
-      border:1px solid var(--border);
-      border-radius: var(--radius);
-      background: rgba(255,255,255,0.04);
-      overflow:hidden;
-    }
-    .card .hd{
-      padding:14px 14px 10px;
-      border-bottom:1px solid var(--border);
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-    }
-    .card .hd h3{
-      margin:0;
-      font-size:13px;
-      letter-spacing:0.25px;
-      font-weight:900;
-    }
-    .tag{
-      font-size:11px;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,0.04);
-      color:var(--muted);
-    }
-    .card .bd{padding:14px}
-
-    /* Form */
-    .row{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:12px;
-    }
-    @media (max-width:680px){
-      .row{grid-template-columns:1fr}
-    }
-    label{
-      font-size:12px;
-      color:var(--muted);
-      font-weight:700;
-      display:block;
-      margin-bottom:6px;
-    }
-    input, select, textarea{
-      width:100%;
-      padding:12px 12px;
-      border-radius:14px;
-      outline:none;
-      border:1px solid var(--border);
-      background: rgba(10,14,26,0.65);
-      color:var(--txt);
-      font-weight:700;
-    }
-    textarea{min-height:90px; resize:vertical}
-    .form-actions{
-      margin-top:12px;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    /* Table */
-    .table{
-      width:100%;
-      border-collapse:collapse;
-      overflow:hidden;
-      border-radius:16px;
-    }
-    .table th, .table td{
-      padding:12px 10px;
-      border-bottom:1px solid rgba(255,255,255,0.08);
-      font-size:12px;
-      text-align:left;
-    }
-    .table th{
-      color:rgba(234,240,255,0.85);
-      font-weight:900;
-      letter-spacing:0.3px;
-      background: rgba(255,255,255,0.04);
-    }
-
-    .status{
-      display:inline-flex;
-      gap:8px;
-      align-items:center;
-      padding:7px 10px;
-      border-radius:999px;
-      font-weight:900;
-      font-size:11px;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,0.05);
-    }
-    .dot{width:9px;height:9px;border-radius:99px; display:inline-block}
-    .s-pending{ border-color: rgba(251,191,36,0.25); background: rgba(251,191,36,0.09);}
-    .s-progress{ border-color: rgba(0,229,255,0.25); background: rgba(0,229,255,0.09);}
-    .s-completed{ border-color: rgba(34,197,94,0.25); background: rgba(34,197,94,0.09);}
-    .d-pending{background:var(--warn)}
-    .d-progress{background:var(--accent2)}
-    .d-completed{background:var(--good)}
-
-    /* Notifications */
-    .toast{
-      position:fixed;
-      right:18px;
-      bottom:18px;
-      min-width:260px;
-      max-width:340px;
-      padding:14px 14px;
-      border-radius:18px;
-      border:1px solid var(--border);
-      background: rgba(10,14,26,0.72);
-      backdrop-filter: var(--blur);
-      box-shadow: 0 26px 70px rgba(0,0,0,0.5);
-      display:none;
-      z-index:100;
-    }
-    .toast strong{display:block; font-size:13px}
-    .toast span{display:block; margin-top:6px; font-size:12px; color:var(--muted); line-height:1.45}
-    .toast.ok{border-color: rgba(34,197,94,0.26)}
-    .toast.warn{border-color: rgba(251,191,36,0.26)}
-    .toast.bad{border-color: rgba(255,77,109,0.26)}
-
-    .muted{color:var(--muted)}
-    .hide{display:none !important;}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrimeAuto | Service Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            850: '#151e2e',
+                            900: '#0f172a',
+                        },
+                        primary: {
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+    </style>
 </head>
+<body class="bg-slate-900 text-slate-100 h-screen flex flex-col overflow-hidden">
 
-<body>
-  <!-- TopBar -->
-  <div class="topbar">
-    <div class="brand">
-      <div class="logo">VS</div>
-      <div>
-        <h1>Vehicle Service Management System</h1>
-        <p>Professional Service Booking & Tracking Panel</p>
-      </div>
+    <nav class="bg-slate-850 border-b border-slate-700 px-6 py-4 flex justify-between items-center shadow-lg z-50">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-primary-500/20">
+                <i class="fa-solid fa-screwdriver-wrench"></i>
+            </div>
+            <h1 class="text-xl font-bold tracking-tight text-white">Prime<span class="text-primary-500">Auto</span></h1>
+        </div>
+        <div id="navButtons" class="hidden flex gap-4">
+            <span id="welcomeMsg" class="self-center text-slate-400 text-sm mr-4"></span>
+            <button onclick="logout()" class="text-sm font-medium text-slate-400 hover:text-white transition-colors">
+                <i class="fa-solid fa-right-from-bracket mr-1"></i> Logout
+            </button>
+        </div>
+    </nav>
+
+    <main class="flex-1 overflow-y-auto p-6 relative">
+        
+        <div id="toast" class="fixed top-20 right-5 bg-emerald-600 text-white px-6 py-3 rounded shadow-lg transform translate-x-full transition-transform duration-300 z-50">
+            Action Successful
+        </div>
+
+        <section id="authSection" class="h-full flex items-center justify-center fade-in">
+            <div class="bg-slate-800 p-8 rounded-2xl border border-slate-700 shadow-2xl w-full max-w-md">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold text-white mb-2">Welcome Back</h2>
+                    <p class="text-slate-400 text-sm">Access the professional service portal</p>
+                </div>
+                
+                <div class="flex bg-slate-700/50 p-1 rounded-lg mb-6">
+                    <button onclick="toggleAuth('login')" id="tabLogin" class="flex-1 py-2 text-sm font-medium rounded-md bg-slate-600 text-white shadow transition-all">Login</button>
+                    <button onclick="toggleAuth('register')" id="tabRegister" class="flex-1 py-2 text-sm font-medium rounded-md text-slate-400 hover:text-white transition-all">Register</button>
+                </div>
+
+                <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Email</label>
+                        <input type="email" id="loginEmail" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-primary-500 transition-colors" placeholder="admin@prime.com" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Password</label>
+                        <input type="password" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-primary-500 transition-colors" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="w-full bg-primary-600 hover:bg-primary-500 text-white font-semibold py-2.5 rounded-lg transition-all shadow-lg shadow-primary-600/20">Sign In</button>
+                    <p class="text-xs text-center text-slate-500 mt-4">Demo Admin: admin@prime.com | User: user@gmail.com</p>
+                </form>
+
+                <form id="registerForm" onsubmit="handleRegister(event)" class="space-y-4 hidden">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Full Name</label>
+                        <input type="text" id="regName" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-primary-500" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Email</label>
+                        <input type="email" id="regEmail" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-primary-500" required>
+                    </div>
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2.5 rounded-lg transition-all">Create Account</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="customerDashboard" class="hidden max-w-6xl mx-auto space-y-8 fade-in">
+            <div class="flex justify-between items-end border-b border-slate-700 pb-4">
+                <div>
+                    <h2 class="text-3xl font-bold text-white">My Garage</h2>
+                    <p class="text-slate-400">Manage your vehicles and service history.</p>
+                </div>
+                <button onclick="openModal('addVehicleModal')" class="bg-primary-600 hover:bg-primary-500 text-white px-5 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition-all">
+                    <i class="fa-solid fa-plus"></i> Add Vehicle
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                    <div class="text-slate-400 text-sm font-medium">Total Vehicles</div>
+                    <div class="text-3xl font-bold text-white mt-2" id="statVehicles">0</div>
+                </div>
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                    <div class="text-slate-400 text-sm font-medium">Active Services</div>
+                    <div class="text-3xl font-bold text-emerald-400 mt-2" id="statActive">0</div>
+                </div>
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                    <div class="text-slate-400 text-sm font-medium">Completed Services</div>
+                    <div class="text-3xl font-bold text-blue-400 mt-2" id="statCompleted">0</div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-1 space-y-4">
+                    <h3 class="text-lg font-semibold text-white">Select Vehicle to Book</h3>
+                    <div id="vehicleListContainer" class="space-y-3">
+                        </div>
+                </div>
+
+                <div class="lg:col-span-2 space-y-4">
+                    <h3 class="text-lg font-semibold text-white">Service History & Status</h3>
+                    <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
+                        <table class="w-full text-left text-sm text-slate-400">
+                            <thead class="bg-slate-700/50 text-slate-200 uppercase text-xs">
+                                <tr>
+                                    <th class="px-6 py-3">Vehicle</th>
+                                    <th class="px-6 py-3">Service Type</th>
+                                    <th class="px-6 py-3">Date</th>
+                                    <th class="px-6 py-3">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="customerHistoryTable" class="divide-y divide-slate-700">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="adminDashboard" class="hidden max-w-7xl mx-auto space-y-6 fade-in">
+            <div class="flex justify-between items-center border-b border-slate-700 pb-4">
+                <div>
+                    <h2 class="text-3xl font-bold text-white">Admin Console</h2>
+                    <p class="text-slate-400">Monitor bookings and update workflow.</p>
+                </div>
+                <div class="bg-slate-800 px-4 py-2 rounded-lg border border-slate-700">
+                    <span class="text-slate-400 text-xs uppercase tracking-widest font-bold">Total Revenue (Est)</span>
+                    <div class="text-xl font-bold text-emerald-400">$12,450.00</div>
+                </div>
+            </div>
+
+            <div class="bg-slate-800 rounded-xl border border-slate-700 shadow-xl overflow-hidden">
+                <div class="p-6 border-b border-slate-700 flex justify-between items-center">
+                    <h3 class="font-semibold text-white">All Service Requests</h3>
+                    <input type="text" placeholder="Search ID or Name..." class="bg-slate-900 border border-slate-600 rounded-lg px-3 py-1 text-sm text-white focus:outline-none">
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-slate-400">
+                        <thead class="bg-slate-700/50 text-slate-200 uppercase text-xs">
+                            <tr>
+                                <th class="px-6 py-4">ID</th>
+                                <th class="px-6 py-4">Customer</th>
+                                <th class="px-6 py-4">Vehicle Details</th>
+                                <th class="px-6 py-4">Service</th>
+                                <th class="px-6 py-4">Status</th>
+                                <th class="px-6 py-4 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminBookingTable" class="divide-y divide-slate-700">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="addVehicleModal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50 backdrop-blur-sm">
+        <div class="bg-slate-800 rounded-xl border border-slate-700 p-6 w-full max-w-sm shadow-2xl">
+            <h3 class="text-xl font-bold text-white mb-4">Add New Vehicle</h3>
+            <form onsubmit="handleAddVehicle(event)" class="space-y-3">
+                <input type="text" id="vName" placeholder="Car Name (e.g. BMW X5)" class="w-full bg-slate-900 border border-slate-600 rounded px-3 py-2 text-white" required>
+                <input type="text" id="vPlate" placeholder="License Plate" class="w-full bg-slate-900 border border-slate-600 rounded px-3 py-2 text-white" required>
+                <div class="flex justify-end gap-2 mt-4">
+                    <button type="button" onclick="closeModal('addVehicleModal')" class="px-4 py-2 text-slate-300 hover:text-white">Cancel</button>
+                    <button type="submit" class="bg-primary-600 hover:bg-primary-500 text-white px-4 py-2 rounded-lg">Add Vehicle</button>
+                </div>
+            </form>
+        </div>
     </div>
 
-    <div class="top-actions">
-      <div class="pill" id="sessionPill">Not Logged In</div>
-      <button class="btn" onclick="seedDemo()">Demo Data</button>
-      <button class="btn danger" onclick="resetAll()">Reset</button>
-      <button class="btn primary" onclick="logout()">Logout</button>
-    </div>
-  </div>
-
-  <div class="container">
-    <div class="grid">
-      <!-- Sidebar -->
-      <aside class="side">
-        <header>
-          <h2>Navigation</h2>
-          <span id="roleHint">Login to access features.</span>
-        </header>
-        <div class="nav" id="navButtons">
-          <!-- Buttons injected dynamically -->
-        </div>
-      </aside>
-
-      <!-- Main -->
-      <main class="main">
-        <header>
-          <div>
-            <h2 id="pageTitle">Welcome</h2>
-            <p id="pageSubtitle">
-              This is a modern dark UI vehicle service management software. Register/login and start managing service bookings professionally.
-            </p>
-          </div>
-          <div class="pill" id="systemInfo">LocalStorage Mode • Single File</div>
-        </header>
-
-        <div class="content" id="pageContent"></div>
-      </main>
-    </div>
-  </div>
-
-  <!-- Toast -->
-  <div class="toast" id="toast">
-    <strong id="toastTitle">Done</strong>
-    <span id="toastMsg">Action completed.</span>
-  </div>
-
-<script>
-  /***************
-   * Data Layer
-   ***************/
-  const LS = {
-    users: "vsm_users",
-    vehicles: "vsm_vehicles",
-    bookings: "vsm_bookings",
-    session: "vsm_session"
-  };
-
-  function getData(key, fallback){
-    try{ return JSON.parse(localStorage.getItem(key)) ?? fallback; }
-    catch(e){ return fallback; }
-  }
-
-  function setData(key, value){
-    localStorage.setItem(key, JSON.stringify(value));
-  }
-
-  function uid(prefix="ID"){
-    return `${prefix}-${Math.random().toString(16).slice(2,8).toUpperCase()}-${Date.now().toString().slice(-5)}`;
-  }
-
-  function nowStr(){
-    const d = new Date();
-    return d.toLocaleString();
-  }
-
-  function toast(type, title, msg){
-    const t = document.getElementById("toast");
-    t.className = `toast ${type}`;
-    document.getElementById("toastTitle").textContent = title;
-    document.getElementById("toastMsg").textContent = msg;
-    t.style.display = "block";
-    setTimeout(()=> t.style.display="none", 2600);
-  }
-
-  function statusBadge(status){
-    if(status==="Pending"){
-      return `<span class="status s-pending"><span class="dot d-pending"></span>Pending</span>`;
-    }
-    if(status==="In Progress"){
-      return `<span class="status s-progress"><span class="dot d-progress"></span>In Progress</span>`;
-    }
-    return `<span class="status s-completed"><span class="dot d-completed"></span>Completed</span>`;
-  }
-
-  function getSession(){
-    return getData(LS.session, null);
-  }
-
-  function setSession(sess){
-    setData(LS.session, sess);
-  }
-
-  function logout(){
-    setSession(null);
-    toast("warn", "Logged out", "You are now logged out.");
-    render();
-  }
-
-  /***************
-   * Seed / Reset
-   ***************/
-  function seedDemo(){
-    const users = getData(LS.users, []);
-    const already = users.find(u => u.email==="admin@vsm.com");
-    if(!already){
-      users.push({
-        id: uid("USR"),
-        name: "Admin",
-        email: "admin@vsm.com",
-        password: "admin123",
-        role: "admin",
-        createdAt: nowStr()
-      });
-      users.push({
-        id: uid("USR"),
-        name: "Sanjay PV",
-        email: "sanjay@vsm.com",
-        password: "1234",
-        role: "customer",
-        createdAt: nowStr()
-      });
-      setData(LS.users, users);
-    }
-
-    const vehicles = getData(LS.vehicles, []);
-    const customer = users.find(u=>u.email==="sanjay@vsm.com");
-    if(customer && vehicles.filter(v=>v.userId===customer.id).length===0){
-      vehicles.push({
-        id: uid("VEH"),
-        userId: customer.id,
-        ownerName: customer.name,
-        vehicleNo: "KL-13-AB-2026",
-        model: "Hyundai i20",
-        type: "Car",
-        createdAt: nowStr()
-      });
-      setData(LS.vehicles, vehicles);
-
-      const bookings = getData(LS.bookings, []);
-      bookings.push({
-        id: uid("BK"),
-        userId: customer.id,
-        vehicleId: vehicles[vehicles.length-1].id,
-        serviceType: "Full Service",
-        preferredDate: new Date(Date.now()+86400000).toISOString().slice(0,10),
-        notes: "Check engine oil & brakes",
-        status: "Pending",
-        createdAt: nowStr(),
-        updatedAt: nowStr()
-      });
-      setData(LS.bookings, bookings);
-    }
-
-    toast("ok","Demo Ready","Admin: admin@vsm.com / admin123 • Customer: sanjay@vsm.com / 1234");
-    render();
-  }
-
-  function resetAll(){
-    if(!confirm("This will delete ALL data (users, vehicles, bookings). Continue?")) return;
-    localStorage.removeItem(LS.users);
-    localStorage.removeItem(LS.vehicles);
-    localStorage.removeItem(LS.bookings);
-    localStorage.removeItem(LS.session);
-    toast("bad","Reset Completed","All records cleared.");
-    render();
-  }
-
-  /***************
-   * UI Routing
-   ***************/
-  const PAGES = {
-    welcome: {title:"Welcome", subtitle:"Login/Register to start using the vehicle service management system."},
-    register: {title:"Customer Registration", subtitle:"Create your customer account to book services and track status."},
-    login: {title:"Login", subtitle:"Login as Customer or Admin. (Admin can update service progress)."},
-    customer_dashboard: {title:"Customer Dashboard", subtitle:"Manage vehicles, book service, and track history in one place."},
-    add_vehicle: {title:"Add Vehicle", subtitle:"Add vehicle details linked to your customer account."},
-    book_service: {title:"Book Service", subtitle:"Book a service request for any registered vehicle."},
-    service_status: {title:"Service Status", subtitle:"Track current booking status: Pending → In Progress → Completed."},
-    service_history: {title:"Service History", subtitle:"View all completed/previous service bookings."},
-    admin_dashboard: {title:"Admin Dashboard", subtitle:"View all service bookings and update service status in real-time."}
-  };
-
-  function setActiveNav(page){
-    document.querySelectorAll(".nav button").forEach(b=>{
-      b.classList.toggle("active", b.dataset.page===page);
-    });
-  }
-
-  function setHeader(page){
-    document.getElementById("pageTitle").textContent = PAGES[page].title;
-    document.getElementById("pageSubtitle").textContent = PAGES[page].subtitle;
-  }
-
-  function renderNav(){
-    const nav = document.getElementById("navButtons");
-    nav.innerHTML = "";
-
-    const sess = getSession();
-    const roleHint = document.getElementById("roleHint");
-    const sessionPill = document.getElementById("sessionPill");
-
-    if(!sess){
-      sessionPill.textContent = "Not Logged In";
-      roleHint.textContent = "Register or login to continue.";
-      nav.innerHTML = `
-        <button data-page="welcome" onclick="go('welcome')"><span class="icon">🏁</span>Welcome</button>
-        <button data-page="register" onclick="go('register')"><span class="icon">🧾</span>Register</button>
-        <button data-page="login" onclick="go('login')"><span class="icon">🔐</span>Login</button>
-      `;
-      return;
-    }
-
-    sessionPill.textContent = `${sess.role.toUpperCase()} • ${sess.name}`;
-    roleHint.textContent = sess.role === "admin"
-      ? "Admin privileges: update service status"
-      : "Customer: manage vehicles & services";
-
-    if(sess.role === "customer"){
-      nav.innerHTML = `
-        <button data-page="customer_dashboard" onclick="go('customer_dashboard')"><span class="icon">📊</span>Dashboard</button>
-        <button data-page="add_vehicle" onclick="go('add_vehicle')"><span class="icon">🚗</span>Add Vehicle</button>
-        <button data-page="book_service" onclick="go('book_service')"><span class="icon">🛠️</span>Book Service</button>
-        <button data-page="service_status" onclick="go('service_status')"><span class="icon">📍</span>Service Status</button>
-        <button data-page="service_history" onclick="go('service_history')"><span class="icon">🧾</span>Service History</button>
-      `;
-    }else{
-      nav.innerHTML = `
-        <button data-page="admin_dashboard" onclick="go('admin_dashboard')"><span class="icon">🧠</span>Admin Dashboard</button>
-      `;
-    }
-  }
-
-  function go(page){
-    window.__page = page;
-    render();
-  }
-
-  /***************
-   * Pages
-   ***************/
-  function pageWelcome(){
-    return `
-      <div class="cards">
-        <div class="card">
-          <div class="hd"><h3>Modern Service Platform</h3><span class="tag">Dark UI • Standard</span></div>
-          <div class="bd">
-            <p class="muted">
-              This system provides a professional interface for customers to manage vehicle services and for admin to update service progress.
-            </p>
-            <div class="form-actions">
-              <button class="btn primary" onclick="go('register')">Create Customer Account</button>
-              <button class="btn" onclick="go('login')">Login</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="hd"><h3>Login Credentials (Demo)</h3><span class="tag">Optional</span></div>
-          <div class="bd">
-            <p class="muted"><b>Admin:</b> admin@vsm.com / admin123</p>
-            <p class="muted"><b>Customer:</b> sanjay@vsm.com / 1234</p>
-            <div class="form-actions">
-              <button class="btn" onclick="seedDemo()">Load Demo Data</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  function pageRegister(){
-    return `
-      <div class="cards">
-        <div class="card" style="grid-column:1/-1">
-          <div class="hd"><h3>Customer Registration</h3><span class="tag">Secure Local Demo</span></div>
-          <div class="bd">
-            <div class="row">
-              <div>
-                <label>Full Name</label>
-                <input id="reg_name" placeholder="Enter your name" />
-              </div>
-              <div>
-                <label>Email</label>
-                <input id="reg_email" placeholder="Enter email" />
-              </div>
-            </div>
-
-            <div class="row" style="margin-top:12px">
-              <div>
-                <label>Password</label>
-                <input id="reg_pass" type="password" placeholder="Create password" />
-              </div>
-              <div>
-                <label>Confirm Password</label>
-                <input id="reg_pass2" type="password" placeholder="Confirm password" />
-              </div>
-            </div>
-
-            <div class="form-actions">
-              <button class="btn primary" onclick="registerCustomer()">Register</button>
-              <button class="btn" onclick="go('login')">Already have account? Login</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  function pageLogin(){
-    return `
-      <div class="cards">
-        <div class="card">
-          <div class="hd"><h3>Login</h3><span class="tag">Customer / Admin</span></div>
-          <div class="bd">
-            <label>Email</label>
-            <input id="log_email" placeholder="Enter email" />
-            <div style="height:12px"></div>
-            <label>Password</label>
-            <input id="log_pass" type="password" placeholder="Enter password" />
-
-            <div class="form-actions">
-              <button class="btn primary" onclick="login()">Login</button>
-              <button class="btn" onclick="go('register')">Create Customer Account</button>
-            </div>
-
-            <p class="muted" style="margin-top:12px">
-              Tip: Click <b>Demo Data</b> to quickly try admin + customer panels.
-            </p>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="hd"><h3>System Highlights</h3><span class="tag">Standard</span></div>
-          <div class="bd">
-            <ul class="muted" style="margin:0; padding-left:18px; line-height:1.8">
-              <li>Role-based Access (Customer/Admin)</li>
-              <li>Service Status Tracking</li>
-              <li>Service History & Table Layout</li>
-              <li>Professional dark-mode interface</li>
-              <li>Single-file software for GitHub Pages</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  function pageCustomerDashboard(){
-    const sess = getSession();
-    const vehicles = getData(LS.vehicles, []).filter(v=>v.userId===sess.id);
-    const bookings = getData(LS.bookings, []).filter(b=>b.userId===sess.id);
-
-    const pending = bookings.filter(b=>b.status!=="Completed").length;
-    const completed = bookings.filter(b=>b.status==="Completed").length;
-
-    return `
-      <div class="cards">
-        <div class="card">
-          <div class="hd"><h3>Quick Overview</h3><span class="tag">Customer</span></div>
-          <div class="bd">
-            <p class="muted"><b>${vehicles.length}</b> vehicles registered</p>
-            <p class="muted"><b>${pending}</b> active bookings</p>
-            <p class="muted"><b>${completed}</b> completed services</p>
-            <div class="form-actions">
-              <button class="btn primary" onclick="go('book_service')">Book Service</button>
-              <button class="btn" onclick="go('add_vehicle')">Add Vehicle</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="hd"><h3>Recent Bookings</h3><span class="tag">Live Status</span></div>
-          <div class="bd">
-            ${renderBookingsTable(bookings.slice().reverse().slice(0,4), true)}
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  function pageAddVehicle(){
-    return `
-      <div class="cards">
-        <div class="card" style="grid-column:1/-1">
-          <div class="hd"><h3>Add Vehicle Details</h3><span class="tag">Customer Module</span></div>
-          <div class="bd">
-            <div class="row">
-              <div>
-                <label>Vehicle Number</label>
-                <input id="veh_no" placeholder="Eg: KL-13-AB-2026" />
-              </div>
-              <div>
-                <label>Vehicle Type</label>
-                <select id="veh_type">
-                  <option>Car</option>
-                  <option>Bike</option>
-                  <option>SUV</option>
-                  <option>Van</option>
-                  <option>Truck</option>
+    <div id="bookServiceModal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50 backdrop-blur-sm">
+        <div class="bg-slate-800 rounded-xl border border-slate-700 p-6 w-full max-w-sm shadow-2xl">
+            <h3 class="text-xl font-bold text-white mb-2">Book Service</h3>
+            <p id="bookModalVehicleName" class="text-slate-400 text-sm mb-4"></p>
+            <form onsubmit="handleBookService(event)" class="space-y-3">
+                <input type="hidden" id="bookVehicleId">
+                <select id="serviceType" class="w-full bg-slate-900 border border-slate-600 rounded px-3 py-2 text-white" required>
+                    <option value="General Service">General Service ($150)</option>
+                    <option value="Oil Change">Oil Change ($50)</option>
+                    <option value="Brake Repair">Brake Repair ($200)</option>
+                    <option value="Engine Diagnostics">Engine Diagnostics ($80)</option>
                 </select>
-              </div>
-            </div>
-
-            <div class="row" style="margin-top:12px">
-              <div>
-                <label>Vehicle Model</label>
-                <input id="veh_model" placeholder="Eg: Honda City / i20 / Pulsar" />
-              </div>
-              <div>
-                <label>Owner Name</label>
-                <input id="veh_owner" placeholder="Owner full name" />
-              </div>
-            </div>
-
-            <div class="form-actions">
-              <button class="btn primary" onclick="addVehicle()">Save Vehicle</button>
-              <button class="btn" onclick="go('customer_dashboard')">Back to Dashboard</button>
-            </div>
-
-            <div style="height:14px"></div>
-            <div class="card" style="background:rgba(255,255,255,0.03)">
-              <div class="hd"><h3>Your Vehicles</h3><span class="tag">List</span></div>
-              <div class="bd" id="vehicleList"></div>
-            </div>
-          </div>
+                <input type="date" id="serviceDate" class="w-full bg-slate-900 border border-slate-600 rounded px-3 py-2 text-white" required>
+                <div class="flex justify-end gap-2 mt-4">
+                    <button type="button" onclick="closeModal('bookServiceModal')" class="px-4 py-2 text-slate-300 hover:text-white">Cancel</button>
+                    <button type="submit" class="bg-primary-600 hover:bg-primary-500 text-white px-4 py-2 rounded-lg">Confirm Booking</button>
+                </div>
+            </form>
         </div>
-      </div>
-    `;
-  }
+    </div>
 
-  function pageBookService(){
-    const sess = getSession();
-    const vehicles = getData(LS.vehicles, []).filter(v=>v.userId===sess.id);
+    <script>
+        // --- DATA MOCKUP ---
+        let currentUser = null;
+        
+        // Initial Dummy Data
+        const db = {
+            users: [
+                { id: 1, name: "Admin User", email: "admin@prime.com", role: "admin" },
+                { id: 2, name: "John Doe", email: "user@gmail.com", role: "customer" }
+            ],
+            vehicles: [
+                { id: 101, userId: 2, name: "Tesla Model 3", plate: "KL-08-BQ-1234" },
+                { id: 102, userId: 2, name: "Ford Mustang", plate: "KL-07-AZ-9999" }
+            ],
+            bookings: [
+                { id: 5001, userId: 2, vehicleId: 101, vehicleName: "Tesla Model 3", service: "General Service", date: "2023-11-20", status: "Completed" },
+                { id: 5002, userId: 2, vehicleId: 102, vehicleName: "Ford Mustang", service: "Oil Change", date: "2023-12-01", status: "Pending" }
+            ]
+        };
 
-    let vehicleOptions = vehicles.map(v => `<option value="${v.id}">${v.vehicleNo} • ${v.model} (${v.type})</option>`).join("");
-    if(!vehicleOptions) vehicleOptions = `<option value="">No vehicle found</option>`;
+        // --- AUTHENTICATION ---
+        function toggleAuth(type) {
+            const loginForm = document.getElementById('loginForm');
+            const regForm = document.getElementById('registerForm');
+            const tabLogin = document.getElementById('tabLogin');
+            const tabRegister = document.getElementById('tabRegister');
 
-    return `
-      <div class="cards">
-        <div class="card" style="grid-column:1/-1">
-          <div class="hd"><h3>Book Vehicle Service</h3><span class="tag">Booking Module</span></div>
-          <div class="bd">
-            <div class="row">
-              <div>
-                <label>Select Vehicle</label>
-                <select id="bk_vehicle">${vehicleOptions}</select>
-                <p class="muted" style="margin:8px 0 0; font-size:11px">
-                  Add vehicle first if not available.
-                </p>
-              </div>
-              <div>
-                <label>Preferred Date</label>
-                <input id="bk_date" type="date" />
-              </div>
-            </div>
+            if(type === 'login') {
+                loginForm.classList.remove('hidden');
+                regForm.classList.add('hidden');
+                tabLogin.classList.replace('text-slate-400', 'text-white');
+                tabLogin.classList.replace('bg-transparent', 'bg-slate-600');
+                tabRegister.classList.replace('bg-slate-600', 'bg-transparent');
+                tabRegister.classList.add('text-slate-400');
+            } else {
+                loginForm.classList.add('hidden');
+                regForm.classList.remove('hidden');
+                tabRegister.classList.replace('text-slate-400', 'text-white');
+                tabRegister.classList.replace('bg-transparent', 'bg-slate-600');
+                tabLogin.classList.replace('bg-slate-600', 'bg-transparent');
+                tabLogin.classList.add('text-slate-400');
+            }
+        }
 
-            <div class="row" style="margin-top:12px">
-              <div>
-                <label>Service Type</label>
-                <select id="bk_type">
-                  <option>General Service</option>
-                  <option>Full Service</option>
-                  <option>Engine Check</option>
-                  <option>Oil Change</option>
-                  <option>Brake Service</option>
-                  <option>AC Service</option>
-                </select>
-              </div>
-              <div>
-                <label>Notes</label>
-                <textarea id="bk_notes" placeholder="Any special instruction..."></textarea>
-              </div>
-            </div>
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            // Simple mock login
+            const user = db.users.find(u => u.email === email);
+            
+            if (user) {
+                currentUser = user;
+                initApp();
+            } else {
+                alert("Invalid Credentials. Try admin@prime.com or user@gmail.com");
+            }
+        }
 
-            <div class="form-actions">
-              <button class="btn primary" onclick="bookService()">Confirm Booking</button>
-              <button class="btn" onclick="go('service_status')">View Status</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
-  }
+        function handleRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            
+            const newUser = { id: Date.now(), name, email, role: 'customer' };
+            db.users.push(newUser);
+            currentUser = newUser;
+            showToast("Account Created Successfully");
+            initApp();
+        }
 
-  function pageServiceStatus(){
-    const sess = getSession();
-    const bookings = getData(LS.bookings, []).filter(b=>b.userId===sess.id);
-    const active = bookings.filter(b=>b.status!=="Completed").slice().reverse();
+        function logout() {
+            currentUser = null;
+            document.getElementById('authSection').classList.remove('hidden');
+            document.getElementById('customerDashboard').classList.add('hidden');
+            document.getElementById('adminDashboard').classList.add('hidden');
+            document.getElementById('navButtons').classList.add('hidden');
+            document.getElementById('loginEmail').value = '';
+        }
 
-    return `
-      <div class="cards">
-        <div class="card" style="grid-column:1/-1">
-          <div class="hd"><h3>Active Bookings</h3><span class="tag">Status Live</span></div>
-          <div class="bd">
-            ${renderBookingsTable(active, true)}
-          </div>
-        </div>
-      </div>
-    `;
-  }
+        // --- DASHBOARD LOGIC ---
+        function initApp() {
+            // Hide Auth
+            document.getElementById('authSection').classList.add('hidden');
+            document.getElementById('navButtons').classList.remove('hidden');
+            document.getElementById('navButtons').classList.add('flex');
+            document.getElementById('welcomeMsg').innerText = `Hello, ${currentUser.name}`;
 
-  function pageServiceHistory(){
-    const sess = getSession();
-    const bookings = getData(LS.bookings, []).filter(b=>b.userId===sess.id).slice().reverse();
-    return `
-      <div class="cards">
-        <div class="card" style="grid-column:1/-1">
-          <div class="hd"><h3>Service History</h3><span class="tag">All Records</span></div>
-          <div class="bd">
-            ${renderBookingsTable(bookings, true)}
-          </div>
-        </div>
-      </div>
-    `;
-  }
+            if(currentUser.role === 'admin') {
+                renderAdminDashboard();
+            } else {
+                renderCustomerDashboard();
+            }
+        }
 
-  function pageAdminDashboard(){
-    const bookings = getData(LS.bookings, []).slice().reverse();
-    const users = getData(LS.users, []);
-    const vehicles = getData(LS.vehicles, []);
+        // --- CUSTOMER FUNCTIONS ---
+        function renderCustomerDashboard() {
+            document.getElementById('customerDashboard').classList.remove('hidden');
+            
+            // 1. Render Vehicles
+            const vContainer = document.getElementById('vehicleListContainer');
+            vContainer.innerHTML = '';
+            const myVehicles = db.vehicles.filter(v => v.userId === currentUser.id);
+            
+            document.getElementById('statVehicles').innerText = myVehicles.length;
 
-    function getUserName(id){
-      return users.find(u=>u.id===id)?.name ?? "Unknown";
-    }
-    function getVehicle(id){
-      return vehicles.find(v=>v.id===id);
-    }
+            if(myVehicles.length === 0) {
+                vContainer.innerHTML = `<div class="p-4 text-center text-slate-500 border border-dashed border-slate-700 rounded-lg">No vehicles found. Add one!</div>`;
+            } else {
+                myVehicles.forEach(v => {
+                    vContainer.innerHTML += `
+                        <div class="bg-slate-800 p-4 rounded-lg border border-slate-700 flex justify-between items-center group hover:border-primary-500 transition-colors">
+                            <div>
+                                <h4 class="font-bold text-white">${v.name}</h4>
+                                <span class="text-xs text-slate-400 bg-slate-900 px-2 py-1 rounded">${v.plate}</span>
+                            </div>
+                            <button onclick="openBookModal(${v.id}, '${v.name}')" class="text-sm bg-slate-700 hover:bg-primary-600 text-white px-3 py-1.5 rounded transition-colors">
+                                Book
+                            </button>
+                        </div>
+                    `;
+                });
+            }
 
-    let rows = bookings.map(b=>{
-      const veh = getVehicle(b.vehicleId);
-      const customer = getUserName(b.userId);
-      return `
-        <tr>
-          <td><b>${b.id}</b><br><span class="muted">${b.createdAt}</span></td>
-          <td>${customer}<br><span class="muted">${veh ? (veh.vehicleNo + " • " + veh.model) : "N/A"}</span></td>
-          <td>${b.serviceType}<br><span class="muted">Preferred: ${b.preferredDate || "-"}</span></td>
-          <td>${statusBadge(b.status)}</td>
-          <td>
-            <select onchange="updateStatus('${b.id}', this.value)">
-              <option ${b.status==="Pending"?"selected":""}>Pending</option>
-              <option ${b.status==="In Progress"?"selected":""}>In Progress</option>
-              <option ${b.status==="Completed"?"selected":""}>Completed</option>
-            </select>
-            <div style="margin-top:8px" class="muted">Updated: ${b.updatedAt}</div>
-          </td>
-        </tr>
-      `;
-    }).join("");
+            // 2. Render History & Stats
+            renderCustomerHistory();
+        }
 
-    if(!rows){
-      rows = `<tr><td colspan="5" class="muted">No service bookings found.</td></tr>`;
-    }
+        function renderCustomerHistory() {
+            const tableBody = document.getElementById('customerHistoryTable');
+            tableBody.innerHTML = '';
+            
+            const myBookings = db.bookings.filter(b => b.userId === currentUser.id);
+            
+            // Update Stats
+            const active = myBookings.filter(b => b.status !== 'Completed').length;
+            const completed = myBookings.filter(b => b.status === 'Completed').length;
+            document.getElementById('statActive').innerText = active;
+            document.getElementById('statCompleted').innerText = completed;
 
-    return `
-      <div class="cards">
-        <div class="card" style="grid-column:1/-1">
-          <div class="hd"><h3>All Service Bookings</h3><span class="tag">Admin Control</span></div>
-          <div class="bd">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Booking</th>
-                  <th>Customer & Vehicle</th>
-                  <th>Service</th>
-                  <th>Status</th>
-                  <th>Update</th>
-                </tr>
-              </thead>
-              <tbody>${rows}</tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    `;
-  }
+            myBookings.forEach(b => {
+                let statusColor = getStatusColor(b.status);
+                tableBody.innerHTML += `
+                    <tr>
+                        <td class="px-6 py-4 font-medium text-white">${b.vehicleName}</td>
+                        <td class="px-6 py-4">${b.service}</td>
+                        <td class="px-6 py-4 text-slate-500">${b.date}</td>
+                        <td class="px-6 py-4"><span class="${statusColor} px-2 py-1 rounded text-xs font-bold">${b.status}</span></td>
+                    </tr>
+                `;
+            });
+        }
 
-  /***************
-   * Rendering Helpers
-   ***************/
-  function renderBookingsTable(bookings, includeVehicle){
-    const vehicles = getData(LS.vehicles, []);
-    function getVehicle(id){
-      return vehicles.find(v=>v.id===id);
-    }
+        function handleAddVehicle(e) {
+            e.preventDefault();
+            const name = document.getElementById('vName').value;
+            const plate = document.getElementById('vPlate').value;
+            
+            db.vehicles.push({
+                id: Date.now(),
+                userId: currentUser.id,
+                name: name,
+                plate: plate
+            });
+            
+            closeModal('addVehicleModal');
+            showToast('Vehicle Added');
+            renderCustomerDashboard();
+            e.target.reset();
+        }
 
-    if(!bookings || bookings.length===0){
-      return `<div class="muted">No bookings available.</div>`;
-    }
+        function handleBookService(e) {
+            e.preventDefault();
+            const vId = document.getElementById('bookVehicleId').value;
+            const vehicleObj = db.vehicles.find(v => v.id == vId);
+            const service = document.getElementById('serviceType').value;
+            const date = document.getElementById('serviceDate').value;
 
-    let rows = bookings.map(b=>{
-      const veh = getVehicle(b.vehicleId);
-      return `
-        <tr>
-          <td><b>${b.id}</b><br><span class="muted">${b.createdAt}</span></td>
-          <td>${veh ? `${veh.vehicleNo} • ${veh.model}` : "N/A"}<br>
-              <span class="muted">${veh ? veh.type : ""}</span>
-          </td>
-          <td>${b.serviceType}<br><span class="muted">Preferred: ${b.preferredDate || "-"}</span></td>
-          <td>${statusBadge(b.status)}<br><span class="muted">Updated: ${b.updatedAt}</span></td>
-        </tr>
-      `;
-    }).join("");
+            db.bookings.push({
+                id: Date.now(),
+                userId: currentUser.id,
+                vehicleId: vId,
+                vehicleName: vehicleObj.name,
+                service: service,
+                date: date,
+                status: 'Pending'
+            });
 
-    return `
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Booking</th>
-            <th>Vehicle</th>
-            <th>Service</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>${rows}</tbody>
-      </table>
-    `;
-  }
+            closeModal('bookServiceModal');
+            showToast('Service Booked Successfully');
+            renderCustomerDashboard();
+        }
 
-  /***************
-   * Actions
-   ***************/
-  function registerCustomer(){
-    const name = document.getElementById("reg_name").value.trim();
-    const email = document.getElementById("reg_email").value.trim().toLowerCase();
-    const pass = document.getElementById("reg_pass").value;
-    const pass2 = document.getElementById("reg_pass2").value;
+        // --- ADMIN FUNCTIONS ---
+        function renderAdminDashboard() {
+            document.getElementById('adminDashboard').classList.remove('hidden');
+            const tableBody = document.getElementById('adminBookingTable');
+            tableBody.innerHTML = '';
 
-    if(!name || !email || !pass) return toast("bad","Error","Fill all fields.");
-    if(pass !== pass2) return toast("bad","Password mismatch","Confirm password correctly.");
+            db.bookings.forEach(b => {
+                const customer = db.users.find(u => u.id === b.userId);
+                
+                // Dropdown logic
+                let statusOptions = '';
+                ['Pending', 'In Progress', 'Completed'].forEach(opt => {
+                    const selected = b.status === opt ? 'selected' : '';
+                    statusOptions += `<option value="${opt}" ${selected}>${opt}</option>`;
+                });
 
-    const users = getData(LS.users, []);
-    if(users.find(u=>u.email===email)){
-      return toast("warn","Already Registered","Email already exists.");
-    }
+                tableBody.innerHTML += `
+                    <tr class="hover:bg-slate-700/30 transition-colors">
+                        <td class="px-6 py-4 text-slate-500">#${b.id.toString().slice(-4)}</td>
+                        <td class="px-6 py-4 font-medium text-white">${customer.name}</td>
+                        <td class="px-6 py-4">
+                            <div class="font-bold text-slate-200">${b.vehicleName}</div>
+                            <div class="text-xs text-slate-500">${b.service}</div>
+                        </td>
+                        <td class="px-6 py-4 text-slate-400">${b.service}</td>
+                        <td class="px-6 py-4">
+                             <select onchange="updateStatus(${b.id}, this.value)" class="bg-slate-900 border border-slate-600 text-xs rounded px-2 py-1 text-white focus:border-primary-500 focus:outline-none">
+                                ${statusOptions}
+                             </select>
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <button class="text-slate-400 hover:text-white"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
 
-    const u = { id: uid("USR"), name, email, password: pass, role:"customer", createdAt: nowStr() };
-    users.push(u);
-    setData(LS.users, users);
+        function updateStatus(bookingId, newStatus) {
+            const booking = db.bookings.find(b => b.id === bookingId);
+            if(booking) {
+                booking.status = newStatus;
+                showToast(`Status updated to ${newStatus}`);
+                // Re-render handled automatically by select change visually, but good to refresh data logic
+            }
+        }
 
-    toast("ok","Registered","Customer account created successfully.");
-    go("login");
-  }
+        // --- UTILS ---
+        function getStatusColor(status) {
+            if(status === 'Pending') return 'bg-yellow-500/20 text-yellow-500';
+            if(status === 'In Progress') return 'bg-blue-500/20 text-blue-500';
+            if(status === 'Completed') return 'bg-emerald-500/20 text-emerald-500';
+            return 'bg-slate-700 text-slate-300';
+        }
 
-  function login(){
-    const email = document.getElementById("log_email").value.trim().toLowerCase();
-    const pass = document.getElementById("log_pass").value;
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+            document.getElementById(id).classList.add('flex');
+        }
 
-    const users = getData(LS.users, []);
-    const u = users.find(x => x.email===email && x.password===pass);
-    if(!u) return toast("bad","Login failed","Invalid email or password.");
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+            document.getElementById(id).classList.remove('flex');
+        }
 
-    setSession({id:u.id, name:u.name, email:u.email, role:u.role});
-    toast("ok","Login success", `Welcome ${u.name}`);
-    go(u.role==="admin" ? "admin_dashboard" : "customer_dashboard");
-  }
+        function openBookModal(vId, vName) {
+            document.getElementById('bookVehicleId').value = vId;
+            document.getElementById('bookModalVehicleName').innerText = `Booking for: ${vName}`;
+            openModal('bookServiceModal');
+        }
 
-  function addVehicle(){
-    const sess = getSession();
-    if(!sess) return;
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.classList.remove('translate-x-full');
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+            }, 3000);
+        }
 
-    const vehicleNo = document.getElementById("veh_no").value.trim().toUpperCase();
-    const type = document.getElementById("veh_type").value;
-    const model = document.getElementById("veh_model").value.trim();
-    const ownerName = document.getElementById("veh_owner").value.trim() || sess.name;
-
-    if(!vehicleNo || !model) return toast("bad","Error","Vehicle number & model are required.");
-
-    const vehicles = getData(LS.vehicles, []);
-    if(vehicles.find(v => v.vehicleNo===vehicleNo)){
-      return toast("warn","Already Exists","This vehicle number is already registered.");
-    }
-
-    vehicles.push({
-      id: uid("VEH"),
-      userId: sess.id,
-      ownerName,
-      vehicleNo, model, type,
-      createdAt: nowStr()
-    });
-
-    setData(LS.vehicles, vehicles);
-    toast("ok","Saved","Vehicle added successfully.");
-    renderVehiclesList();
-  }
-
-  function renderVehiclesList(){
-    const sess = getSession();
-    const listDiv = document.getElementById("vehicleList");
-    if(!listDiv) return;
-
-    const vehicles = getData(LS.vehicles, []).filter(v=>v.userId===sess.id).slice().reverse();
-    if(vehicles.length===0){
-      listDiv.innerHTML = `<div class="muted">No vehicles found. Add one above.</div>`;
-      return;
-    }
-
-    listDiv.innerHTML = `
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Vehicle No</th>
-            <th>Model</th>
-            <th>Type</th>
-            <th>Added</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${vehicles.map(v=>`
-            <tr>
-              <td><b>${v.vehicleNo}</b></td>
-              <td>${v.model}</td>
-              <td>${v.type}</td>
-              <td><span class="muted">${v.createdAt}</span></td>
-            </tr>
-          `).join("")}
-        </tbody>
-      </table>
-    `;
-  }
-
-  function bookService(){
-    const sess = getSession();
-    const vehicleId = document.getElementById("bk_vehicle").value;
-    const preferredDate = document.getElementById("bk_date").value;
-    const serviceType = document.getElementById("bk_type").value;
-    const notes = document.getElementById("bk_notes").value.trim();
-
-    if(!vehicleId) return toast("bad","Error","Please add/select a vehicle first.");
-    if(!preferredDate) return toast("warn","Missing date","Choose preferred service date.");
-
-    const bookings = getData(LS.bookings, []);
-    bookings.push({
-      id: uid("BK"),
-      userId: sess.id,
-      vehicleId,
-      serviceType,
-      preferredDate,
-      notes,
-      status: "Pending",
-      createdAt: nowStr(),
-      updatedAt: nowStr()
-    });
-
-    setData(LS.bookings, bookings);
-    toast("ok","Booked","Service booking created successfully.");
-    go("service_status");
-  }
-
-  function updateStatus(bookingId, newStatus){
-    const sess = getSession();
-    if(!sess || sess.role!=="admin") return toast("bad","Denied","Admin only.");
-
-    const bookings = getData(LS.bookings, []);
-    const b = bookings.find(x=>x.id===bookingId);
-    if(!b) return toast("bad","Error","Booking not found.");
-
-    b.status = newStatus;
-    b.updatedAt = nowStr();
-
-    setData(LS.bookings, bookings);
-    toast("ok","Updated",`Booking ${bookingId} is now "${newStatus}".`);
-    render();
-  }
-
-  /***************
-   * Render App
-   ***************/
-  function render(){
-    renderNav();
-
-    const sess = getSession();
-    let page = window.__page || "welcome";
-
-    // redirect logic
-    if(!sess && !["welcome","register","login"].includes(page)) page = "login";
-    if(sess && sess.role==="customer" && page==="admin_dashboard") page = "customer_dashboard";
-    if(sess && sess.role==="admin" && ["customer_dashboard","add_vehicle","book_service","service_status","service_history"].includes(page)) page = "admin_dashboard";
-
-    setHeader(page);
-    setActiveNav(page);
-
-    const content = document.getElementById("pageContent");
-
-    switch(page){
-      case "welcome": content.innerHTML = pageWelcome(); break;
-      case "register": content.innerHTML = pageRegister(); break;
-      case "login": content.innerHTML = pageLogin(); break;
-
-      case "customer_dashboard": content.innerHTML = pageCustomerDashboard(); break;
-      case "add_vehicle": content.innerHTML = pageAddVehicle(); setTimeout(renderVehiclesList, 50); break;
-      case "book_service": content.innerHTML = pageBookService(); break;
-      case "service_status": content.innerHTML = pageServiceStatus(); break;
-      case "service_history": content.innerHTML = pageServiceHistory(); break;
-
-      case "admin_dashboard": content.innerHTML = pageAdminDashboard(); break;
-      default: content.innerHTML = pageWelcome();
-    }
-
-    // update role hint UI
-    const sessionPill = document.getElementById("sessionPill");
-    if(sess) sessionPill.textContent = `${sess.role.toUpperCase()} • ${sess.name}`;
-  }
-
-  // first load
-  render();
-</script>
+    </script>
 </body>
 </html>
